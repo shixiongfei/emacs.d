@@ -3,3 +3,9 @@
 *~
 *.~undo-tree
 elpa
+auto-save-list
+projectile-bookmarks.eld
+savefile/
+custom.el
+transient/
+var/
