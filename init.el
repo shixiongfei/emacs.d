@@ -513,6 +513,8 @@
 
 
 ;;; programming language
+
+;; Common Lisp
 (use-package slime
   :ensure t
   :config
