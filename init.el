@@ -479,6 +479,11 @@
   (global-undo-tree-mode +1)
   (diminish 'undo-tree-mode))
 
+(use-package swiper
+  :ensure t
+  :config
+  (global-set-key "\C-s" 'swiper))
+
 (use-package ace-window
   :ensure t
   :config
