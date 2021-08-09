@@ -309,16 +309,24 @@
     (add-hook hook #'elisp-slime-nav-mode))
   (diminish 'elisp-slime-nav-mode))
 
-(use-package paredit
-  :ensure t
+(use-package smartparens-config
+  :ensure smartparens
   :config
-  (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
+  (setq sp-base-key-bindings 'paredit)
+  (setq sp-autoskip-closing-pair 'always)
+  (setq sp-hybrid-kill-entire-symbol nil)
+
+  (sp-use-paredit-bindings)
+  (show-smartparens-global-mode +1)
+
+  (add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
   ;; enable in the *scratch* buffer
-  (add-hook 'lisp-interaction-mode-hook #'paredit-mode)
-  (add-hook 'ielm-mode-hook #'paredit-mode)
-  (add-hook 'lisp-mode-hook #'paredit-mode)
-  (add-hook 'eval-expression-minibuffer-setup-hook #'paredit-mode)
-  (diminish 'paredit-mode "()"))
+  (add-hook 'lisp-interaction-mode-hook #'smartparens-strict-mode)
+  (add-hook 'ielm-mode-hook #'smartparens-strict-mode)
+  (add-hook 'lisp-mode-hook #'smartparens-strict-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook #'smartparens-strict-mode)
+  (diminish 'smartparens-mode)
+  (diminish 'smartparens-strict-mode))
 
 (use-package anzu
   :ensure t
