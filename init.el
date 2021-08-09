@@ -353,7 +353,9 @@
    ([(meta shift down)] . move-text-down)))
 
 (use-package rainbow-delimiters
-  :ensure t)
+  :ensure t
+  :config
+  (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode))
 
 (use-package rainbow-mode
   :ensure t
@@ -508,6 +510,58 @@
   :config
   (volatile-highlights-mode +1)
   (diminish 'volatile-highlights-mode))
+
+
+;;; programming language
+(use-package slime
+  :ensure t
+  :config
+  ;; the SBCL configuration file is in Common Lisp
+  (add-to-list 'auto-mode-alist '("\\.sbclrc\\'" . lisp-mode))
+  ;; Open files with .cl extension in lisp-mode
+  (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode))
+
+  (with-eval-after-load "slime"
+    ;; a list of alternative Common Lisp implementations that can be
+    ;; used with SLIME. Note that their presence render
+    ;; inferior-lisp-program useless. This variable holds a list of
+    ;; programs and if you invoke SLIME with a negative prefix
+    ;; argument, M-- M-x slime, you can select a program from that list.
+    (setq slime-lisp-implementations
+          '((ccl64 ("ccl64")
+                   :coding-system utf-8-unix)
+            (sbcl ("sbcl" "--noinform" "--dynamic-space-size" "8192")
+                  :coding-system utf-8-unix)))
+
+    ;; select the default value from slime-lisp-implementations
+    (if (and (eq system-type 'darwin)
+             (executable-find "ccl64"))
+        ;; default to Clozure CL on macOS
+        (setq slime-default-lisp 'ccl64)
+      ;; default to SBCL on Linux and Windows
+      (setq slime-default-lisp 'sbcl))
+
+    ;; Add fancy slime contribs
+    (setq slime-contribs '(slime-fancy slime-cl-indent))
+
+    (setq slime-completion-at-point-functions 'slime-fuzzy-complete-symbol
+          slime-net-coding-system 'utf-8-unix
+          slime-enable-evaluate-in-emacs t)
+
+    (add-hook 'slime-repl-mode-hook (lambda ()
+                                      (smartparens-strict-mode +1)
+                                      (whitespace-mode -1)))
+
+    (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector)
+
+    (when (eq system-type 'darwin)
+      (setq common-lisp-hyperspec-root
+            "/usr/local/share/doc/hyperspec/HyperSpec/")
+      (setq common-lisp-hyperspec-symbol-table
+            (concat common-lisp-hyperspec-root "Data/Map_Sym.txt"))
+      (setq common-lisp-hyperspec-issuex-table
+            (concat common-lisp-hyperspec-root "Data/Map_IssX.txt")))))
+
 
 
 ;; config changes made through the customize UI will be stored here
