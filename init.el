@@ -93,7 +93,7 @@
 ;; Newline at end of file
 (setq require-final-newline t)
 
-;; Wrap lines at 80 characters
+;; Wrap lines at 100 characters
 (setq-default fill-column 100)
 
 ;; delete the selection with a keypress
