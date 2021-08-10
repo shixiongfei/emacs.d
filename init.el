@@ -170,7 +170,9 @@
 
 (use-package elec-pair
   :config
-  (electric-pair-mode +1))
+  (electric-indent-mode +1)
+  (electric-pair-mode +1)
+  (setq electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit))
 
 (use-package hl-line
   :config
@@ -315,25 +317,6 @@
   (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
     (add-hook hook #'elisp-slime-nav-mode))
   (diminish 'elisp-slime-nav-mode))
-
-(use-package smartparens-config
-  :ensure smartparens
-  :config
-  (setq sp-base-key-bindings 'paredit)
-  (setq sp-autoskip-closing-pair 'always)
-  (setq sp-hybrid-kill-entire-symbol nil)
-
-  (sp-use-paredit-bindings)
-  (show-smartparens-global-mode +1)
-
-  (add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
-  ;; enable in the *scratch* buffer
-  (add-hook 'lisp-interaction-mode-hook #'smartparens-strict-mode)
-  (add-hook 'ielm-mode-hook #'smartparens-strict-mode)
-  (add-hook 'lisp-mode-hook #'smartparens-strict-mode)
-  (add-hook 'eval-expression-minibuffer-setup-hook #'smartparens-strict-mode)
-  (diminish 'smartparens-mode)
-  (diminish 'smartparens-strict-mode))
 
 (use-package anzu
   :ensure t
@@ -559,7 +542,6 @@
           slime-enable-evaluate-in-emacs t)
 
     (add-hook 'slime-repl-mode-hook (lambda ()
-                                      (smartparens-strict-mode +1)
                                       (whitespace-mode -1)))
 
     (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector)
