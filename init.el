@@ -94,7 +94,7 @@
 (setq require-final-newline t)
 
 ;; Wrap lines at 80 characters
-(setq-default fill-column 80)
+(setq-default fill-column 100)
 
 ;; delete the selection with a keypress
 (delete-selection-mode t)
@@ -376,7 +376,8 @@
     (add-hook hook #'whitespace-mode))
   (add-hook 'before-save-hook #'whitespace-cleanup)
   :config
-  (setq whitespace-line-column 80) ;; limit line length
+  ;; When nil, set the value to `fill-column'
+  (setq whitespace-line-column nil)
   (setq whitespace-style '(face tabs empty trailing lines-tail)))
 
 (use-package selectrum
