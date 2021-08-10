@@ -178,6 +178,10 @@
   (setq save-abbrevs 'silently)
   (setq-default abbrev-mode t))
 
+(use-package eshell
+  :init
+  (setq eshell-directory-name (expand-file-name "eshell" user-savefile-dir)))
+
 (use-package uniquify
   :config
   (setq uniquify-buffer-name-style 'forward)
