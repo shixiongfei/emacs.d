@@ -111,6 +111,9 @@
 ;; show the name of the current function definition in the modeline
 (which-function-mode 1)
 
+;; enable winner-mode to manage window configurations
+(winner-mode +1)
+
 (set-language-environment "UTF-8")
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
