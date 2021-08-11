@@ -269,6 +269,9 @@
 ;;; third-party packages
 (use-package base16-theme
   :ensure t
+  :init
+  (unless (display-graphic-p)
+    (setq base16-theme-256-color-source 'colors))
   :config
   (load-theme 'base16-default-dark t))
 
@@ -560,17 +563,19 @@
             (concat common-lisp-hyperspec-root "Data/Map_IssX.txt")))))
 
 
-;; Setting Default Font
-(set-face-attribute 'default nil :font "Inconsolata")
+;; Fonts setting
+(when (display-graphic-p)
+  ;; Setting Default Font
+  (set-face-attribute 'default nil :font "Inconsolata")
 
-;; Setting Unicode Font
-(set-fontset-font t 'unicode "STIX Two Math")
+  ;; Setting Unicode Font
+  (set-fontset-font t 'unicode "STIX Two Math")
 
-;; Setting CJK Font
-(set-fontset-font t 'han "Noto Serif CJK SC")
-(set-fontset-font t 'han "Noto Serif CJK TC" nil 'append)
-(set-fontset-font t 'kana "Noto Serif CJK JP")
-(set-fontset-font t 'hangul "Noto Serif CJK KR")
+  ;; Setting CJK Font
+  (set-fontset-font t 'han "Noto Serif CJK SC")
+  (set-fontset-font t 'han "Noto Serif CJK TC" nil 'append)
+  (set-fontset-font t 'kana "Noto Serif CJK JP")
+  (set-fontset-font t 'hangul "Noto Serif CJK KR"))
 
 
 ;; config changes made through the customize UI will be stored here
