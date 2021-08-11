@@ -584,7 +584,7 @@
 
   ;; Enable emoji, and stop the UI from freezing when trying to display them.
   (when (eq system-type 'darwin)
-    (set-fontset-font 'unicode "Apple Color Emoji" nil 'prepend)))
+    (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend)))
 
 
 ;; config changes made through the customize UI will be stored here
