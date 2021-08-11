@@ -280,34 +280,16 @@
   (diminish 'flyspell-prog-mode)
   (diminish 'eldoc-mode))
 
-(use-package avy
-  :ensure t
-  :bind (("s-." . avy-goto-word-or-subword-1)
-         ("s-," . avy-goto-char)
-         ("C-c ." . avy-goto-word-or-subword-1)
-         ("C-c ," . avy-goto-char)
-         ("M-g f" . avy-goto-line)
-         ("M-g w" . avy-goto-word-or-subword-1))
-  :config
-  (setq avy-background t))
-
-(use-package magit
-  :ensure t
-  :bind (("C-x g" . magit-status)))
-
-(use-package git-timemachine
-  :ensure t
-  :bind (("s-g" . git-timemachine)))
-
 (use-package ag
-  :ensure t)
+  :ensure t
+  :config
+  (setq ag-highlight-search t)
+  (global-set-key (kbd "C-c a") 'ag)
+  (global-set-key (kbd "C-c A") 'ag-project))
 
 (use-package projectile
   :ensure t
   :config
-  ;; I typically use this keymap prefix on macOS
-  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-  ;; On Linux, however, I usually go with another one
   (define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map)
   (global-set-key (kbd "C-c p") 'projectile-command-map)
   (projectile-mode +1))
@@ -407,15 +389,9 @@
   (setq hl-todo-highlight-punctuation ":")
   (global-hl-todo-mode))
 
-(use-package zop-to-char
-  :ensure t
-  :bind (("M-z" . zop-up-to-char)
-         ("M-Z" . zop-to-char)))
-
 (use-package imenu-anywhere
   :ensure t
-  :bind (("C-c i" . imenu-anywhere)
-         ("s-i" . imenu-anywhere)))
+  :bind (("C-c C-j" . imenu-anywhere)))
 
 (use-package flyspell
   :config
@@ -436,46 +412,22 @@
 (use-package super-save
   :ensure t
   :config
-  ;; add integration with ace-window
-  (add-to-list 'super-save-triggers 'ace-window)
   (super-save-mode +1)
   (diminish 'super-save-mode))
 
 (use-package crux
   :ensure t
   :bind (("C-c o" . crux-open-with)
-         ("M-o" . crux-smart-open-line)
          ("C-c n" . crux-cleanup-buffer-or-region)
          ("C-c f" . crux-recentf-find-file)
-         ("C-M-z" . crux-indent-defun)
-         ("C-c u" . crux-view-url)
-         ("C-c e" . crux-eval-and-replace)
          ("C-c w" . crux-swap-windows)
-         ("C-c D" . crux-delete-file-and-buffer)
-         ("C-c r" . crux-rename-buffer-and-file)
-         ("C-c t" . crux-visit-term-buffer)
-         ("C-c k" . crux-kill-other-buffers)
-         ("C-c TAB" . crux-indent-rigidly-and-copy-to-clipboard)
-         ("C-c I" . crux-find-user-init-file)
-         ("C-c S" . crux-find-shell-init-file)
-         ("s-r" . crux-recentf-find-file)
-         ("s-j" . crux-top-join-line)
-         ("C-^" . crux-top-join-line)
-         ("s-k" . crux-kill-whole-line)
+         ("C-k" . crux-smart-kill-line)
          ("C-<backspace>" . crux-kill-line-backwards)
-         ("s-o" . crux-smart-open-line-above)
          ([remap move-beginning-of-line] . crux-move-beginning-of-line)
          ([(shift return)] . crux-smart-open-line)
          ([(control shift return)] . crux-smart-open-line-above)
-         ([remap kill-whole-line] . crux-kill-whole-line)
-         ("C-c s" . crux-ispell-word-then-abbrev)))
-
-(use-package diff-hl
-  :ensure t
-  :config
-  (global-diff-hl-mode +1)
-  (add-hook 'dired-mode-hook 'diff-hl-dired-mode)
-  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
+         ([remap kill-line] . crux-smart-kill-line)
+         ([remap kill-whole-line] . crux-kill-whole-line)))
 
 (use-package which-key
   :ensure t
@@ -497,12 +449,6 @@
   :ensure t
   :config
   (global-set-key "\C-s" 'swiper))
-
-(use-package ace-window
-  :ensure t
-  :config
-  (global-set-key (kbd "s-w") 'ace-window)
-  (global-set-key [remap other-window] 'ace-window))
 
 ;; super useful for demos
 (use-package keycast
