@@ -27,7 +27,16 @@
 
 (when (eq system-type 'darwin)
   (setq mac-option-modifier 'super)
-  (setq mac-command-modifier 'meta))
+  (setq mac-command-modifier 'meta)
+
+  ;; Iterm2 mouse support
+  (unless window-system
+    (require 'mwheel)
+    (require 'mouse)
+    (xterm-mouse-mode t)
+    (mouse-wheel-mode t)
+    (global-set-key [mouse-4] 'scroll-down-line)
+    (global-set-key [mouse-5] 'scroll-up-line)))
 
 ;; Always load newest byte code
 (setq load-prefer-newer t)
@@ -54,6 +63,10 @@
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
 
+(unless (and (eq system-type 'darwin)
+             window-system)
+  (menu-bar-mode -1))
+
 ;; disable the annoying bell ring
 (setq ring-bell-function 'ignore)
 
@@ -61,9 +74,12 @@
 (setq inhibit-startup-screen t)
 
 ;; nice scrolling
-(setq scroll-margin 0
+(setq scroll-step 1
+      scroll-margin 0
       scroll-conservatively 100000
-      scroll-preserve-screen-position 1)
+      scroll-preserve-screen-position 1
+      mouse-wheel-scroll-amount '(1 ((shift) . 1))
+      mouse-wheel-progressive-speed nil)
 
 ;; mode line settings
 (line-number-mode t)
