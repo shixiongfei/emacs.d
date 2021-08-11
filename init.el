@@ -149,6 +149,10 @@
 
 (define-key 'help-command (kbd "C-i") #'info-display-manual)
 
+;; Shift click to extend marked region
+(when (eq system-type 'windows-nt)
+  (define-key global-map (kbd "<S-down-mouse-1>") 'mouse-save-then-kill))
+
 ;; misc useful keybindings
 (global-set-key (kbd "s-<") #'beginning-of-buffer)
 (global-set-key (kbd "s->") #'end-of-buffer)
