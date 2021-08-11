@@ -9,3 +9,4 @@ savefile/
 custom.el
 transient/
 var/
+projectile.cache
