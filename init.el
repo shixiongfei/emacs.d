@@ -136,7 +136,6 @@
 
 ;; use hippie-expand instead of dabbrev
 (global-set-key (kbd "M-/") #'hippie-expand)
-(global-set-key (kbd "s-/") #'hippie-expand)
 
 ;; replace buffer-menu with ibuffer
 (global-set-key (kbd "C-x C-b") #'ibuffer)
@@ -152,12 +151,6 @@
 ;; Shift click to extend marked region
 (when (eq system-type 'windows-nt)
   (define-key global-map (kbd "<S-down-mouse-1>") 'mouse-save-then-kill))
-
-;; misc useful keybindings
-(global-set-key (kbd "s-<") #'beginning-of-buffer)
-(global-set-key (kbd "s->") #'end-of-buffer)
-(global-set-key (kbd "s-q") #'fill-paragraph)
-(global-set-key (kbd "s-x") #'execute-extended-command)
 
 ;; smart tab behavior - indent or complete
 (setq tab-always-indent 'complete)
@@ -378,13 +371,21 @@
 (use-package selectrum
   :ensure t
   :config
-  (selectrum-mode +1))
+  (setq selectrum-count-style 'current/matches)
+  (selectrum-mode +1)
+  (diminish 'selectrum-mode))
 
 (use-package selectrum-prescient
   :ensure t
   :config
   (selectrum-prescient-mode +1)
   (prescient-persist-mode +1))
+
+(use-package marginalia
+  :ensure t
+  :config
+  (marginalia-mode)
+  (diminish 'marginalia-mode))
 
 (use-package company
   :ensure t
