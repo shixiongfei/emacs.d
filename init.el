@@ -569,7 +569,7 @@
 
 
 ;; Fonts setting
-(when (display-graphic-p)
+(when (fboundp 'set-fontset-font)
   ;; Setting Default Font
   (set-face-attribute 'default nil :font "Inconsolata")
 
@@ -580,7 +580,11 @@
   (set-fontset-font t 'han "Noto Serif CJK SC")
   (set-fontset-font t 'han "Noto Serif CJK TC" nil 'append)
   (set-fontset-font t 'kana "Noto Serif CJK JP")
-  (set-fontset-font t 'hangul "Noto Serif CJK KR"))
+  (set-fontset-font t 'hangul "Noto Serif CJK KR")
+
+  ;; Enable emoji, and stop the UI from freezing when trying to display them.
+  (when (eq system-type 'darwin)
+    (set-fontset-font 'unicode "Apple Color Emoji" nil 'prepend)))
 
 
 ;; config changes made through the customize UI will be stored here
