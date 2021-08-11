@@ -25,6 +25,10 @@
 (setq user-full-name "Xiongfei Shi"
       user-mail-address "xiongfei.shi@icloud.com")
 
+(when (eq system-type 'darwin)
+  (setq mac-option-modifier 'super)
+  (setq mac-command-modifier 'meta))
+
 ;; Always load newest byte code
 (setq load-prefer-newer t)
 
@@ -158,6 +162,7 @@
 ;; enable some commands that are disabled by default
 (put 'erase-buffer 'disabled nil)
 
+
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 
@@ -168,6 +173,8 @@
 ;;; built-in packages
 (use-package paren
   :config
+  (setq show-paren-when-point-inside-paren t
+        show-paren-when-point-in-periphery t)
   (show-paren-mode +1))
 
 (use-package elec-pair
@@ -284,8 +291,7 @@
   :ensure t
   :config
   (setq ag-highlight-search t)
-  (global-set-key (kbd "C-c a") 'ag)
-  (global-set-key (kbd "C-c A") 'ag-project))
+  (global-set-key (kbd "C-c a") 'ag-project))
 
 (use-package projectile
   :ensure t
@@ -369,6 +375,23 @@
   (marginalia-mode)
   (diminish 'marginalia-mode))
 
+(use-package consult
+  :ensure t
+  :config
+  (global-set-key (kbd "C-s") 'consult-line)
+  (global-set-key (kbd "C-x b") 'consult-buffer)
+  (global-set-key (kbd "C-x 4 b") 'consult-buffer-other-window)
+  (global-set-key (kbd "C-x 5 b") 'consult-buffer-other-frame)
+  (global-set-key (kbd "C-c i") 'consult-imenu)
+  (global-set-key (kbd "C-c I") 'consult-imenu-multi)
+  (global-set-key (kbd "M-g g") 'consult-goto-line)
+  (global-set-key (kbd "M-g M-g") 'consult-goto-line)
+
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+
+  (setq consult-project-root-function #'vc-root-dir))
+
 (use-package company
   :ensure t
   :config
@@ -388,10 +411,6 @@
   :config
   (setq hl-todo-highlight-punctuation ":")
   (global-hl-todo-mode))
-
-(use-package imenu-anywhere
-  :ensure t
-  :bind (("C-c C-j" . imenu-anywhere)))
 
 (use-package flyspell
   :config
@@ -444,11 +463,6 @@
   (setq undo-tree-auto-save-history t)
   (global-undo-tree-mode +1)
   (diminish 'undo-tree-mode))
-
-(use-package swiper
-  :ensure t
-  :config
-  (global-set-key "\C-s" 'swiper))
 
 ;; super useful for demos
 (use-package keycast
