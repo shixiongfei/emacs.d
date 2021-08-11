@@ -74,7 +74,9 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; maximize the initial frame automatically
-(add-to-list 'initial-frame-alist '(fullscreen . maximized))
+(if (or (eq system-type 'darwin)
+        (eq system-type 'windows-nt))
+    (add-to-list 'initial-frame-alist '(fullscreen . maximized)))
 
 ;; more useful frame title, that show either a file or a
 ;; buffer name (if the buffer isn't visiting a file)
@@ -557,6 +559,18 @@
       (setq common-lisp-hyperspec-issuex-table
             (concat common-lisp-hyperspec-root "Data/Map_IssX.txt")))))
 
+
+;; Setting Default Font
+(set-face-attribute 'default nil :font "Inconsolata")
+
+;; Setting Unicode Font
+(set-fontset-font t 'unicode "STIX Two Math")
+
+;; Setting CJK Font
+(set-fontset-font t 'han "Noto Serif CJK SC")
+(set-fontset-font t 'han "Noto Serif CJK TC" nil 'append)
+(set-fontset-font t 'kana "Noto Serif CJK JP")
+(set-fontset-font t 'hangul "Noto Serif CJK KR")
 
 
 ;; config changes made through the customize UI will be stored here
