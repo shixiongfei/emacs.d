@@ -360,7 +360,7 @@
 (use-package rainbow-mode
   :ensure t
   :config
-  (add-hook 'prog-mode-hook #'rainbow-mode)
+  (add-hook 'css-mode-hook #'rainbow-mode)
   (diminish 'rainbow-mode))
 
 (use-package whitespace
@@ -493,6 +493,9 @@
 
 ;;; programming language
 
+(add-hook 'prog-mode-hook (lambda ()
+                            (set (make-local-variable 'comment-auto-fill-only-comments) t)))
+
 ;; Common Lisp
 (use-package slime
   :ensure t
@@ -605,6 +608,36 @@
                 (when eob-p
                   (push-mark)
                   (goto-char (point-max)))))))
+
+;; C/C++
+(use-package cc-mode
+  :config
+  ;; this will affect all modes derived from cc-mode, like
+  ;; java-mode, php-mode, etc
+  (add-hook 'c-mode-common-hook (lambda ()
+                                  (setq c-default-style "k&r"
+                                        c-basic-offset 2)
+                                  (c-set-offset 'substatement-open 0)))
+
+  (add-hook 'makefile-mode-hook (lambda ()
+                                  (whitespace-toggle-options '(tabs))
+                                  (setq indent-tabs-mode t))))
+
+(use-package clang-format
+  :ensure t
+  :custom
+  ((clang-format-fallback-style "LLVM"))
+  :config
+  (defun clang-format-on-save ()
+    (add-hook 'before-save-hook #'clang-format-buffer nil 'local))
+
+  (add-hook 'c-mode-hook 'clang-format-on-save)
+  (add-hook 'c++-mode-hook 'clang-format-on-save))
+
+;; CSS
+(use-package css-mode
+  :config
+  (setq css-indent-offset 2))
 
 ;; Org-Mode
 (use-package org
