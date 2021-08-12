@@ -457,12 +457,10 @@
          ("C-c n" . crux-cleanup-buffer-or-region)
          ("C-c f" . crux-recentf-find-file)
          ("C-c w" . crux-swap-windows)
-         ("C-k" . crux-smart-kill-line)
          ("C-<backspace>" . crux-kill-line-backwards)
          ([remap move-beginning-of-line] . crux-move-beginning-of-line)
          ([(shift return)] . crux-smart-open-line)
          ([(control shift return)] . crux-smart-open-line-above)
-         ([remap kill-line] . crux-smart-kill-line)
          ([remap kill-whole-line] . crux-kill-whole-line)))
 
 (use-package which-key
