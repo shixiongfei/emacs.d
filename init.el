@@ -363,6 +363,8 @@
   :ensure t
   :config
   (add-hook 'css-mode-hook #'rainbow-mode)
+  (add-hook 'html-mode-hook #'rainbow-mode)
+  (add-hook 'nxml-mode-hook #'rainbow-mode)
   (diminish 'rainbow-mode))
 
 (use-package whitespace
@@ -635,9 +637,14 @@
   (add-hook 'c-mode-hook 'clang-format-on-save)
   (add-hook 'c++-mode-hook 'clang-format-on-save))
 
+;; SGML(HTML/XML)
+(use-package sgml-mode
+  :init
+  (setq sgml-basic-offset 2))
+
 ;; CSS
 (use-package css-mode
-  :config
+  :init
   (setq css-indent-offset 2))
 
 ;; Org-Mode
