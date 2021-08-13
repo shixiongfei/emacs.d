@@ -27,16 +27,16 @@
 
 (when (eq system-type 'darwin)
   (setq mac-option-modifier 'super)
-  (setq mac-command-modifier 'meta)
+  (setq mac-command-modifier 'meta))
 
-  ;; Iterm2 mouse support
-  (unless window-system
-    (require 'mwheel)
-    (require 'mouse)
-    (xterm-mouse-mode t)
-    (mouse-wheel-mode t)
-    (global-set-key [mouse-4] 'scroll-down-line)
-    (global-set-key [mouse-5] 'scroll-up-line)))
+;; terminal mouse support
+(unless window-system
+  (require 'mwheel)
+  (require 'mouse)
+  (xterm-mouse-mode t)
+  (mouse-wheel-mode t)
+  (global-set-key [mouse-4] 'scroll-down-line)
+  (global-set-key [mouse-5] 'scroll-up-line))
 
 ;; Always load newest byte code
 (setq load-prefer-newer t)
@@ -94,9 +94,8 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; maximize the initial frame automatically
-(if (or (eq system-type 'darwin)
-        (eq system-type 'windows-nt))
-    (add-to-list 'initial-frame-alist '(fullscreen . maximized)))
+(when window-system
+  (add-to-list 'initial-frame-alist '(fullscreen . maximized)))
 
 ;; more useful frame title, that show either a file or a
 ;; buffer name (if the buffer isn't visiting a file)
