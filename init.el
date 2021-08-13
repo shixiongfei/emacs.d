@@ -180,7 +180,7 @@
 ;; enable some commands that are disabled by default
 (put 'erase-buffer 'disabled nil)
 
-
+;; install use-package
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 
@@ -494,7 +494,6 @@
 
 
 ;;; programming language
-
 (add-hook 'prog-mode-hook (lambda ()
                             (set (make-local-variable 'comment-auto-fill-only-comments) t)))
 
