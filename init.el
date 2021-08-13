@@ -675,7 +675,7 @@
               (setq org-html-validation-link nil)
               (setq org-export-with-creator t)
               (setq org-publish-project-alist
-                    '(("org-post"
+                    `(("org-post"
                        :base-directory "~/Codes/org/post"
                        :base-extension "org"
                        :publishing-directory "~/Codes/website/public"
@@ -690,7 +690,9 @@
                        :html-link-home "/"
                        :html-link-up "/"
                        ;; :html-home/up-format ""
-                       :html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\"/>\n<script src=\"https://hm.baidu.com/hm.js?4dbc75a8d627e17a8714e4c8b2e9afa8\"></script>"
+                       :html-head ,(concat
+                                    "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\"/>\n"
+                                    "<script src=\"https://hm.baidu.com/hm.js?4dbc75a8d627e17a8714e4c8b2e9afa8\"></script>")
                        :html-head-include-default-style nil
                        :with-creator t
                        :auto-preamble t
