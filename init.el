@@ -166,6 +166,9 @@
 ;; align code in a pretty way
 (global-set-key (kbd "C-x \\") #'align-regexp)
 
+;; delete matching parentheses, usually used with C-M-u
+(global-set-key (kbd "C-M-p") #'delete-pair)
+
 (define-key 'help-command (kbd "C-i") #'info-display-manual)
 
 ;; Shift click to extend marked region
@@ -626,7 +629,7 @@
 (use-package clang-format
   :ensure t
   :custom
-  ((clang-format-fallback-style "LLVM"))
+  (clang-format-fallback-style "LLVM")
   :config
   (defun clang-format-on-save ()
     (add-hook 'before-save-hook #'clang-format-buffer nil 'local))
