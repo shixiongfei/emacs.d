@@ -733,17 +733,10 @@
 
 ;; Fonts setting
 (when (fboundp 'set-fontset-font)
-  ;; Setting Default Font
-  (set-face-attribute 'default nil :font "Inconsolata")
-
-  ;; Setting Unicode Font
-  (set-fontset-font t 'unicode "STIX Two Math")
-
-  ;; Setting CJK Font
-  (set-fontset-font t 'han "Noto Serif CJK SC")
-  (set-fontset-font t 'han "Noto Serif CJK TC" nil 'append)
-  (set-fontset-font t 'kana "Noto Serif CJK JP")
-  (set-fontset-font t 'hangul "Noto Serif CJK KR")
+  ;; Setting Terminus as the default font (https://files.ax86.net/terminus-ttf/)
+  (if (eq system-type 'windows-nt)
+      (set-face-attribute 'default nil :font "Terminus (TTF) for Windows" :height 120)
+    (set-face-attribute 'default nil :font "Terminus (TTF)" :height 140))
 
   ;; Enable emoji, and stop the UI from freezing when trying to display them.
   (when (eq system-type 'darwin)
