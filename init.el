@@ -529,7 +529,7 @@
       (setq slime-default-lisp 'sbcl))
 
     ;; Add fancy slime contribs
-    (setq slime-contribs '(slime-fancy slime-cl-indent))
+    (setq slime-contribs '(slime-fancy slime-cl-indent slime-company))
 
     (setq slime-completion-at-point-functions 'slime-fuzzy-complete-symbol
           slime-net-coding-system 'utf-8-unix
@@ -539,6 +539,16 @@
                                       (whitespace-mode -1)))
 
     (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector)))
+
+(use-package slime-company
+  :ensure t
+  :after
+  (slime company)
+  :config
+  (setq slime-company-completion 'fuzzy
+        slime-company-after-completion 'slime-company-just-one-space)
+
+  (add-to-list 'company-backends #'company-slime))
 
 ;; Scheme
 (use-package cmuscheme
