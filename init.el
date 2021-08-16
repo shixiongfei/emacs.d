@@ -538,15 +538,7 @@
     (add-hook 'slime-repl-mode-hook (lambda ()
                                       (whitespace-mode -1)))
 
-    (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector)
-
-    (when (eq system-type 'darwin)
-      (setq common-lisp-hyperspec-root
-            "/usr/local/share/doc/hyperspec/HyperSpec/")
-      (setq common-lisp-hyperspec-symbol-table
-            (concat common-lisp-hyperspec-root "Data/Map_Sym.txt"))
-      (setq common-lisp-hyperspec-issuex-table
-            (concat common-lisp-hyperspec-root "Data/Map_IssX.txt")))))
+    (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector)))
 
 ;; Scheme
 (use-package cmuscheme
