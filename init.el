@@ -279,7 +279,6 @@
     (interactive)
     (crux-start-or-switch-to 'ielm "*ielm*"))
 
-  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
   (define-key emacs-lisp-mode-map (kbd "C-c C-z") #'visit-ielm)
   (define-key emacs-lisp-mode-map (kbd "C-c C-c") #'eval-defun)
   (define-key emacs-lisp-mode-map (kbd "C-c C-b") #'eval-buffer))
@@ -329,6 +328,18 @@
     (add-hook hook #'elisp-slime-nav-mode))
   (diminish 'elisp-slime-nav-mode))
 
+(use-package paredit
+  :ensure t
+  :config
+  (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
+  ;; enable in the *scratch* buffer
+  (add-hook 'lisp-interaction-mode-hook #'paredit-mode)
+  (add-hook 'ielm-mode-hook #'paredit-mode)
+  (add-hook 'lisp-mode-hook #'paredit-mode)
+  (add-hook 'scheme-mode-hook #'paredit-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook #'paredit-mode)
+  (diminish 'paredit-mode "()"))
+
 (use-package anzu
   :ensure t
   :bind (("M-%" . anzu-query-replace)
@@ -356,6 +367,7 @@
 (use-package rainbow-delimiters
   :ensure t
   :config
+  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'scheme-mode-hook #'rainbow-delimiters-mode))
 
