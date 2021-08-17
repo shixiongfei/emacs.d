@@ -733,20 +733,17 @@
 
 ;; Fonts setting
 (when (fboundp 'set-fontset-font)
-  ;; Setting Terminus as the default font
-  (if (eq system-type 'windows-nt)
-      (progn
-        ;; https://files.ax86.net/terminus-ttf/
-        (set-face-attribute 'default nil :font "Terminus (TTF) for Windows" :height 120)
-        (set-fontset-font t 'han "SimSun")
-        (set-fontset-font t 'han "SimSun-ExtB" nil 'append))
-    (progn
-      ;; brew install font-terminus
-      (set-face-attribute 'default nil :font "Terminus (TTF)" :height 140)
-      (set-fontset-font t 'han "STSong SC")))
+  (when (eq system-type 'windows-nt)
+    ;; https://files.ax86.net/terminus-ttf/
+    (set-face-attribute 'default nil :font "Terminus (TTF) for Windows" :height 120)
+    (set-fontset-font t 'han "SimSun")
+    (set-fontset-font t 'han "SimSun-ExtB" nil 'append))
 
-  ;; Enable emoji, and stop the UI from freezing when trying to display them.
   (when (eq system-type 'darwin)
+    ;; brew install font-terminus
+    (set-face-attribute 'default nil :font "Terminus (TTF)" :height 140)
+    (set-fontset-font t 'han "STSong SC")
+    ;; Enable emoji, and stop the UI from freezing when trying to display them.
     (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend)))
 
 
