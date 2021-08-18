@@ -744,6 +744,10 @@
   :config
   (add-hook 'org-mode-hook #'org-bullets-mode))
 
+;; YAML
+(use-package yaml-mode
+  :ensure t)
+
 
 ;; Fonts setting
 (when (fboundp 'set-fontset-font)
