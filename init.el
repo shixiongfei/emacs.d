@@ -294,7 +294,9 @@
   (unless (display-graphic-p)
     (setq base16-theme-256-color-source 'colors))
   :config
-  (load-theme 'base16-default-dark t))
+  (if (display-graphic-p)
+      (load-theme 'base16-ocean t)
+    (load-theme 'base16-default-dark t)))
 
 (use-package diminish
   :ensure t
@@ -760,7 +762,7 @@
   (when (eq system-type 'darwin)
     ;; brew install font-terminus
     (set-face-attribute 'default nil :font "Terminus (TTF)" :height 140)
-    (set-fontset-font t 'han "STSong SC")
+    (set-fontset-font t 'han "STSong")
     ;; Enable emoji, and stop the UI from freezing when trying to display them.
     (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend)))
 
