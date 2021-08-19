@@ -48,6 +48,9 @@
 ;; warn when opening files bigger than 100MB
 (setq large-file-warning-threshold 100000000)
 
+;; Don't compact font caches during GC
+(setq inhibit-compacting-font-caches t)
+
 ;; quit Emacs directly even if there are running processes
 (setq confirm-kill-processes nil)
 
