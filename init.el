@@ -309,6 +309,14 @@
   (diminish 'flyspell-prog-mode)
   (diminish 'eldoc-mode))
 
+(use-package magit
+  :ensure t
+  :bind (("C-x g g" . magit-status)))
+
+(use-package git-timemachine
+  :ensure t
+  :bind (("C-x g t" . git-timemachine)))
+
 (use-package ag
   :ensure t
   :config
@@ -485,6 +493,13 @@
          ([(shift return)] . crux-smart-open-line)
          ([(control shift return)] . crux-smart-open-line-above)
          ([remap kill-whole-line] . crux-kill-whole-line)))
+
+(use-package diff-hl
+  :ensure t
+  :config
+  (global-diff-hl-mode +1)
+  (add-hook 'dired-mode-hook 'diff-hl-dired-mode)
+  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
 (use-package which-key
   :ensure t
