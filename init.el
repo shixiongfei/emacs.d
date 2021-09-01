@@ -528,6 +528,13 @@
   (volatile-highlights-mode +1)
   (diminish 'volatile-highlights-mode))
 
+;; automatic highlighting current symbol minor mode
+(use-package auto-highlight-symbol
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook 'auto-highlight-symbol-mode)
+  (diminish 'auto-highlight-symbol))
+
 
 ;;; programming language
 (add-hook 'prog-mode-hook (lambda ()
