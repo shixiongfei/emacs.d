@@ -535,6 +535,13 @@
   (add-hook 'prog-mode-hook 'auto-highlight-symbol-mode)
   (diminish 'auto-highlight-symbol))
 
+;; highlight numbers in source code
+(use-package highlight-numbers
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook 'highlight-numbers-mode)
+  (diminish 'highlight-numbers-mode))
+
 
 ;;; programming language
 (add-hook 'prog-mode-hook (lambda ()
