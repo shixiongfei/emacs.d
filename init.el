@@ -533,7 +533,7 @@
   :ensure t
   :config
   (add-hook 'prog-mode-hook 'auto-highlight-symbol-mode)
-  (diminish 'auto-highlight-symbol))
+  (diminish 'auto-highlight-symbol-mode))
 
 ;; highlight numbers in source code
 (use-package highlight-numbers
@@ -691,7 +691,26 @@
 (use-package erlang
   :ensure t
   :config
+  (require 'erlang-start)
+  (require 'erlang-flymake)
+  (setq inferior-erlang-machine-options '("-sname" "emacs"))
+  (add-hook 'erlang-mode-hook (lambda ()
+                                (erlang-tags-init)
+                                (setq erlang-indent-level 2)
+                                (setq erlang-electric-commands '(erlang-electric-comma
+                                                                 erlang-electric-semicolon
+                                                                 erlang-electric-newline))))
   (diminish 'erlang-mode))
+
+(use-package edts
+  :ensure t
+  :after erlang
+  :custom
+  (edts-inhibit-package-check t)
+  :config
+  (add-hook 'after-init-hook (lambda ()
+                               (require 'edts-start)))
+  (diminish 'edts-mode))
 
 ;; SGML(HTML/XML)
 (use-package sgml-mode
