@@ -673,6 +673,12 @@
   (add-hook 'c-mode-hook 'clang-format-on-save)
   (add-hook 'c++-mode-hook 'clang-format-on-save))
 
+;; Erlang
+(use-package erlang
+  :ensure t
+  :config
+  (diminish 'erlang-mode))
+
 ;; SGML(HTML/XML)
 (use-package sgml-mode
   :init
