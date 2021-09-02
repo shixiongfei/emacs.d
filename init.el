@@ -454,6 +454,26 @@
   (global-company-mode)
   (diminish 'company-mode))
 
+(use-package lsp-mode
+  :ensure t
+  :config
+  ;; Customize prefix for key-bindings
+  (setq lsp-keymap-prefix "C-l")
+  ;; Enable logging for lsp-mode
+  (setq lsp-log-io t)
+  (with-eval-after-load 'lsp-mode
+    (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
+  (diminish 'lsp-mode))
+
+(use-package lsp-ui
+  :ensure t
+  :after lsp-mode
+  :config
+  (setq lsp-ui-sideline-enable t)
+  (setq lsp-ui-doc-enable t)
+  (setq lsp-ui-doc-position 'bottom)
+  (diminish 'lsp-ui))
+
 (use-package hl-todo
   :ensure t
   :config
@@ -696,21 +716,13 @@
   (setq inferior-erlang-machine-options '("-sname" "emacs"))
   (add-hook 'erlang-mode-hook (lambda ()
                                 (erlang-tags-init)
-                                (setq erlang-indent-level 2)
+                                (setq erlang-indent-level 4)
                                 (setq erlang-electric-commands '(erlang-electric-comma
                                                                  erlang-electric-semicolon
                                                                  erlang-electric-newline))))
+  ;; Enable LSP for Erlang files
+  (add-hook 'erlang-mode-hook #'lsp)
   (diminish 'erlang-mode))
-
-(use-package edts
-  :ensure t
-  :after erlang
-  :custom
-  (edts-inhibit-package-check t)
-  :config
-  (add-hook 'after-init-hook (lambda ()
-                               (require 'edts-start)))
-  (diminish 'edts-mode))
 
 ;; SGML(HTML/XML)
 (use-package sgml-mode

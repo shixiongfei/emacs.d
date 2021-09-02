@@ -10,5 +10,4 @@ custom.el
 transient/
 var/
 projectile.cache
-ac-comphist.dat
-edts/
+.lsp-session*
