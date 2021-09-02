@@ -10,4 +10,4 @@ custom.el
 transient/
 var/
 projectile.cache
-.lsp-session*
+.lsp-*

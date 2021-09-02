@@ -461,6 +461,8 @@
   (setq lsp-keymap-prefix "C-l")
   ;; Enable logging for lsp-mode
   (setq lsp-log-io t)
+  ;; Disable yasnippet
+  (setq lsp-enable-snippet nil)
   (with-eval-after-load 'lsp-mode
     (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
   (diminish 'lsp-mode))
@@ -723,6 +725,15 @@
   ;; Enable LSP for Erlang files
   (add-hook 'erlang-mode-hook #'lsp)
   (diminish 'erlang-mode))
+
+;; LFE
+(use-package lfe-mode
+  :ensure t
+  :after erlang
+  :config
+  (add-hook 'lfe-mode-hook #'paredit-mode)
+  (add-hook 'lfe-mode-hook #'rainbow-delimiters-mode)
+  (diminish 'lfe-mode))
 
 ;; SGML(HTML/XML)
 (use-package sgml-mode
