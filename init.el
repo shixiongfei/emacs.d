@@ -183,13 +183,21 @@
 ;; enable some commands that are disabled by default
 (put 'erase-buffer 'disabled nil)
 
+(defun start-or-switch-to (function buffer-name)
+  "Start or switch to the BUFFER-NAME of the specified FUNCTION."
+  (if (not (get-buffer buffer-name))
+      (progn
+        (split-window-sensibly (selected-window))
+        (other-window 1)
+        (funcall function))
+    (switch-to-buffer-other-window buffer-name)))
+
 ;; install use-package
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 
 (require 'use-package)
 (setq use-package-verbose t)
-
 
 ;;; built-in packages
 (use-package paren
@@ -280,7 +288,7 @@
   (defun visit-ielm ()
     "Switch to default `ielm' buffer. Start `ielm' if it's not already running."
     (interactive)
-    (crux-start-or-switch-to 'ielm "*ielm*"))
+    (start-or-switch-to 'ielm "*ielm*"))
 
   (define-key emacs-lisp-mode-map (kbd "C-c C-z") #'visit-ielm)
   (define-key emacs-lisp-mode-map (kbd "C-c C-c") #'eval-defun)
@@ -562,7 +570,6 @@
   (add-hook 'prog-mode-hook 'highlight-numbers-mode)
   (diminish 'highlight-numbers-mode))
 
-
 ;;; programming language
 (add-hook 'prog-mode-hook (lambda ()
                             (set (make-local-variable 'comment-auto-fill-only-comments) t)))
@@ -646,6 +653,7 @@
 ;; Erlang
 (use-package erlang
   :ensure t
+  :after lsp-mode
   :config
   (require 'erlang-start)
   (require 'erlang-flymake)
@@ -663,7 +671,7 @@
 ;; LFE
 (use-package lfe-mode
   :ensure t
-  :after erlang
+  :after (erlang paredit rainbow-delimiters)
   :config
   (add-hook 'lfe-mode-hook #'paredit-mode)
   (add-hook 'lfe-mode-hook #'rainbow-delimiters-mode)
@@ -764,7 +772,6 @@
 (use-package yaml-mode
   :ensure t)
 
-
 ;; Fonts setting
 (when (fboundp 'set-fontset-font)
   (when (eq system-type 'windows-nt)
@@ -779,7 +786,6 @@
     (set-fontset-font t 'han "STSong")
     ;; Enable emoji, and stop the UI from freezing when trying to display them.
     (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend)))
-
 
 ;; config changes made through the customize UI will be stored here
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
