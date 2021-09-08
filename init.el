@@ -659,6 +659,10 @@
   (require 'erlang-flymake)
   (setq inferior-erlang-machine-options '("-sname" "emacs"))
 
+  (setq inferior-erlang-machine "rebar3")
+  (setq inferior-erlang-machine-options '("shell"))
+  (setq inferior-erlang-shell-type nil)
+
   (defun rebar-inferior-erlang-compile-outdir (orig &rest args)
     (concat (projectile-project-root) "_build/default/lib/" (projectile-project-name) "/ebin"))
   (advice-add 'inferior-erlang-compile-outdir :around 'rebar-inferior-erlang-compile-outdir)
