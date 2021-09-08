@@ -660,7 +660,9 @@
   (setq inferior-erlang-machine-options '("-sname" "emacs"))
   (add-hook 'erlang-mode-hook (lambda ()
                                 (erlang-tags-init)
-                                (setq erlang-indent-level 4)
+                                (setq erlang-indent-level 2
+                                      erlang-indent-guard 2
+                                      erlang-argument-indent 2)
                                 (setq erlang-electric-commands '(erlang-electric-comma
                                                                  erlang-electric-semicolon
                                                                  erlang-electric-newline))))
