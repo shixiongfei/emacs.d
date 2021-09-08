@@ -657,10 +657,11 @@
   :config
   (require 'erlang-start)
   (require 'erlang-flymake)
-  (setq inferior-erlang-machine-options '("-sname" "emacs"))
+
+  (add-to-list 'auto-mode-alist '("rebar.config" . erlang-mode))
 
   (setq inferior-erlang-machine "rebar3")
-  (setq inferior-erlang-machine-options '("shell"))
+  (setq inferior-erlang-machine-options '("shell" "--sname=emacs"))
   (setq inferior-erlang-shell-type nil)
 
   (defun rebar-inferior-erlang-compile-outdir (orig &rest args)
@@ -674,7 +675,8 @@
                                       erlang-argument-indent 2)
                                 (setq erlang-electric-commands '(erlang-electric-comma
                                                                  erlang-electric-semicolon
-                                                                 erlang-electric-newline))))
+                                                                 erlang-electric-newline))
+                                (setq erlang-compile-extra-opts '(debug_info))))
   ;; Enable LSP for Erlang files
   (add-hook 'erlang-mode-hook #'lsp)
   (diminish 'erlang-mode))
