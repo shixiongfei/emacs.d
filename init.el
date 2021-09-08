@@ -653,11 +653,16 @@
 ;; Erlang
 (use-package erlang
   :ensure t
-  :after lsp-mode
+  :after (lsp-mode projectile)
   :config
   (require 'erlang-start)
   (require 'erlang-flymake)
   (setq inferior-erlang-machine-options '("-sname" "emacs"))
+
+  (defun rebar-inferior-erlang-compile-outdir (orig &rest args)
+    (concat (projectile-project-root) "_build/default/lib/" (projectile-project-name) "/ebin"))
+  (advice-add 'inferior-erlang-compile-outdir :around 'rebar-inferior-erlang-compile-outdir)
+
   (add-hook 'erlang-mode-hook (lambda ()
                                 (erlang-tags-init)
                                 (setq erlang-indent-level 2
