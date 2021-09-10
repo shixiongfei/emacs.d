@@ -669,7 +669,8 @@
   :ensure t
   :after elixir-mode
   :config
-  (add-hook 'elixir-mode-hook 'mix-minor-mode))
+  (add-hook 'elixir-mode-hook 'mix-minor-mode)
+  (diminish 'mix-minor-mode))
 
 ;; Web
 (use-package web-mode
