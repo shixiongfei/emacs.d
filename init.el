@@ -460,28 +460,6 @@
   (global-company-mode)
   (diminish 'company-mode))
 
-(use-package lsp-mode
-  :ensure t
-  :config
-  ;; Customize prefix for key-bindings
-  (setq lsp-keymap-prefix "C-l")
-  ;; Enable logging for lsp-mode
-  (setq lsp-log-io t)
-  ;; Disable yasnippet
-  (setq lsp-enable-snippet nil)
-  (with-eval-after-load 'lsp-mode
-    (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
-  (diminish 'lsp-mode))
-
-(use-package lsp-ui
-  :ensure t
-  :after lsp-mode
-  :config
-  (setq lsp-ui-sideline-enable t)
-  (setq lsp-ui-doc-enable t)
-  (setq lsp-ui-doc-position 'bottom)
-  (diminish 'lsp-ui))
-
 (use-package hl-todo
   :ensure t
   :config
@@ -659,14 +637,7 @@
   (require 'erlang-flymake)
 
   (add-to-list 'auto-mode-alist '("rebar.config" . erlang-mode))
-
-  (setq inferior-erlang-machine "rebar3")
-  (setq inferior-erlang-machine-options '("shell" "--sname=emacs"))
-  (setq inferior-erlang-shell-type nil)
-
-  (defun rebar-inferior-erlang-compile-outdir (orig &rest args)
-    (concat (projectile-project-root) "_build/default/lib/" (projectile-project-name) "/ebin"))
-  (advice-add 'inferior-erlang-compile-outdir :around 'rebar-inferior-erlang-compile-outdir)
+  (setq inferior-erlang-machine-options '("-sname" "emacs"))
 
   (add-hook 'erlang-mode-hook (lambda ()
                                 (erlang-tags-init)
@@ -675,30 +646,37 @@
                                       erlang-argument-indent 2)
                                 (setq erlang-electric-commands '(erlang-electric-comma
                                                                  erlang-electric-semicolon
-                                                                 erlang-electric-newline))
-                                (setq erlang-compile-extra-opts '(debug_info))))
-  ;; Enable LSP for Erlang files
-  (add-hook 'erlang-mode-hook #'lsp)
-  (diminish 'erlang-mode))
+                                                                 erlang-electric-newline)))))
 
-;; LFE
-(use-package lfe-mode
+;; Elixir
+(use-package elixir-mode
   :ensure t
-  :after (erlang paredit rainbow-delimiters)
   :config
-  (add-hook 'lfe-mode-hook #'paredit-mode)
-  (add-hook 'lfe-mode-hook #'rainbow-delimiters-mode)
-  (diminish 'lfe-mode))
+  (add-hook 'elixir-mode-hook #'subword-mode)
+  (add-hook 'elixir-mode-hook (lambda ()
+                                (add-hook 'before-save-hook 'elixir-format nil t))))
 
-;; SGML(HTML/XML)
-(use-package sgml-mode
-  :init
-  (setq sgml-basic-offset 2))
+(use-package inf-elixir
+  :ensure t
+  :after elixir-mode
+  :config
+  (add-hook 'elixir-mode-hook (lambda ()
+                                (define-key elixir-mode-map (kbd "C-c C-z") 'inf-elixir-project)
+                                (define-key elixir-mode-map (kbd "C-c C-e") 'inf-elixir-send-line)
+                                (define-key elixir-mode-map (kbd "C-c C-r") 'inf-elixir-send-region)
+                                (define-key elixir-mode-map (kbd "C-c C-k") 'inf-elixir-send-buffer))))
 
-;; CSS
-(use-package css-mode
-  :init
-  (setq css-indent-offset 2))
+;; Web
+(use-package web-mode
+  :ensure t
+  :custom
+  (web-mode-markup-indent-offset 2)
+  (web-mode-css-indent-offset 2)
+  (web-mode-code-indent-offset 2)
+  :config
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.hbs\\'" . web-mode)))
 
 ;; Org-Mode
 (use-package org
