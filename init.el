@@ -631,7 +631,6 @@
 ;; Erlang
 (use-package erlang
   :ensure t
-  :after (lsp-mode projectile)
   :config
   (require 'erlang-start)
   (require 'erlang-flymake)
@@ -665,6 +664,12 @@
                                 (define-key elixir-mode-map (kbd "C-c C-e") 'inf-elixir-send-line)
                                 (define-key elixir-mode-map (kbd "C-c C-r") 'inf-elixir-send-region)
                                 (define-key elixir-mode-map (kbd "C-c C-k") 'inf-elixir-send-buffer))))
+
+(use-package mix
+  :ensure t
+  :after elixir-mode
+  :config
+  (add-hook 'elixir-mode-hook 'mix-minor-mode))
 
 ;; Web
 (use-package web-mode
