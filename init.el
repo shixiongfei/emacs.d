@@ -689,6 +689,12 @@
   (add-hook 'elixir-mode-hook 'mix-minor-mode)
   (diminish 'mix-minor-mode))
 
+(use-package flycheck-credo
+  :ensure t
+  :after (flycheck elixir-mode)
+  :config
+  (add-hook 'flycheck-mode-hook #'flycheck-credo-setup))
+
 ;; Web
 (use-package web-mode
   :ensure t
