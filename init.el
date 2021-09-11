@@ -704,11 +704,13 @@
   (setq lua-indent-close-paren-align nil)
   (setq lua-indent-string-contents t)
 
-  (define-key lua-mode-map (kbd "C-c C-b") 'lua-send-buffer)
-  (define-key lua-mode-map (kbd "C-c C-l") 'lua-send-current-line)
-  (define-key lua-mode-map (kbd "C-c C-f") 'lua-send-defun)
-  (define-key lua-mode-map (kbd "C-c C-r") 'lua-send-region)
-  (define-key lua-mode-map (kbd "C-c C-z") 'lua-show-process-buffer)
+  (add-hook 'lua-mode-hook
+            (lambda ()
+              (define-key lua-mode-map (kbd "C-c C-b") 'lua-send-buffer)
+              (define-key lua-mode-map (kbd "C-c C-l") 'lua-send-current-line)
+              (define-key lua-mode-map (kbd "C-c C-f") 'lua-send-defun)
+              (define-key lua-mode-map (kbd "C-c C-r") 'lua-send-region)
+              (define-key lua-mode-map (kbd "C-c C-z") 'lua-show-process-buffer)))
 
   (add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode))
   (add-to-list 'interpreter-mode-alist '("lua" . lua-mode)))
