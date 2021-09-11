@@ -549,8 +549,9 @@
   (diminish 'highlight-numbers-mode))
 
 ;;; programming language
-(add-hook 'prog-mode-hook (lambda ()
-                            (set (make-local-variable 'comment-auto-fill-only-comments) t)))
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (set (make-local-variable 'comment-auto-fill-only-comments) t)))
 
 ;; Common Lisp
 (use-package slime
@@ -636,34 +637,50 @@
   (require 'erlang-flymake)
 
   (add-to-list 'auto-mode-alist '("rebar.config" . erlang-mode))
-  (setq inferior-erlang-machine-options '("-sname" "emacs"))
 
-  (add-hook 'erlang-mode-hook (lambda ()
-                                (erlang-tags-init)
-                                (setq erlang-indent-level 2
-                                      erlang-indent-guard 2
-                                      erlang-argument-indent 2)
-                                (setq erlang-electric-commands '(erlang-electric-comma
-                                                                 erlang-electric-semicolon
-                                                                 erlang-electric-newline)))))
+  (setq inferior-erlang-machine "rebar3")
+  (setq inferior-erlang-machine-options '("shell" "--sname=emacs"))
+  (setq inferior-erlang-shell-type nil)
+
+  (defun rebar-inferior-erlang-compile-outdir (orig &rest args)
+    (concat (projectile-project-root) "_build/default/lib/"
+            (projectile-project-name) "/ebin"))
+  (advice-add 'inferior-erlang-compile-outdir
+              :around 'rebar-inferior-erlang-compile-outdir)
+
+  (add-hook 'erlang-mode-hook
+            (lambda ()
+              (erlang-tags-init)
+              (setq erlang-indent-level 2
+                    erlang-indent-guard 2
+                    erlang-argument-indent 2)
+              (setq erlang-electric-commands '(erlang-electric-comma
+                                               erlang-electric-semicolon
+                                               erlang-electric-newline))))
+  (add-hook 'erlang-shell-mode-hook
+            (lambda ()
+              (unless (file-exists-p (rebar-inferior-erlang-compile-outdir nil))
+                (make-directory (rebar-inferior-erlang-compile-outdir nil) t)))))
 
 ;; Elixir
 (use-package elixir-mode
   :ensure t
   :config
   (add-hook 'elixir-mode-hook #'subword-mode)
-  (add-hook 'elixir-mode-hook (lambda ()
-                                (add-hook 'before-save-hook 'elixir-format nil t))))
+  (add-hook 'elixir-mode-hook
+            (lambda ()
+              (add-hook 'before-save-hook 'elixir-format nil t))))
 
 (use-package inf-elixir
   :ensure t
   :after elixir-mode
   :config
-  (add-hook 'elixir-mode-hook (lambda ()
-                                (define-key elixir-mode-map (kbd "C-c C-z") 'inf-elixir-project)
-                                (define-key elixir-mode-map (kbd "C-c C-e") 'inf-elixir-send-line)
-                                (define-key elixir-mode-map (kbd "C-c C-r") 'inf-elixir-send-region)
-                                (define-key elixir-mode-map (kbd "C-c C-k") 'inf-elixir-send-buffer))))
+  (add-hook 'elixir-mode-hook
+            (lambda ()
+              (define-key elixir-mode-map (kbd "C-c C-z") 'inf-elixir-project)
+              (define-key elixir-mode-map (kbd "C-c C-e") 'inf-elixir-send-line)
+              (define-key elixir-mode-map (kbd "C-c C-r") 'inf-elixir-send-region)
+              (define-key elixir-mode-map (kbd "C-c C-k") 'inf-elixir-send-buffer))))
 
 (use-package mix
   :ensure t
@@ -692,9 +709,10 @@
   (setq org-log-done t)
   :config
   (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
-  (add-hook 'org-mode-hook (lambda ()
-                             (define-key org-mode-map (kbd "C-a") 'org-beginning-of-line)
-                             (make-local-variable 'minor-mode-overriding-map-alist)))
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (define-key org-mode-map (kbd "C-a") 'org-beginning-of-line)
+              (make-local-variable 'minor-mode-overriding-map-alist)))
 
   (with-eval-after-load 'org
     (org-babel-do-load-languages
