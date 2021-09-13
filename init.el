@@ -695,6 +695,12 @@
   :config
   (add-hook 'flycheck-mode-hook #'flycheck-credo-setup))
 
+(use-package exunit
+  :ensure t
+  :after elixir-mode
+  :config
+  (add-hook 'elixir-mode-hook #'exunit-mode))
+
 ;; Lua
 (use-package lua-mode
   :ensure t
