@@ -662,6 +662,14 @@
               (unless (file-exists-p (rebar-inferior-erlang-compile-outdir nil))
                 (make-directory (rebar-inferior-erlang-compile-outdir nil) t)))))
 
+;; LFE
+ (use-package lfe-mode
+   :ensure t
+   :after (erlang paredit rainbow-delimiters)
+   :config
+   (add-hook 'lfe-mode-hook #'paredit-mode)
+   (add-hook 'lfe-mode-hook #'rainbow-delimiters-mode))
+
 ;; Elixir
 (use-package elixir-mode
   :ensure t
@@ -686,8 +694,7 @@
   :ensure t
   :after elixir-mode
   :config
-  (add-hook 'elixir-mode-hook 'mix-minor-mode)
-  (diminish 'mix-minor-mode))
+  (add-hook 'elixir-mode-hook 'mix-minor-mode))
 
 (use-package flycheck-credo
   :ensure t
