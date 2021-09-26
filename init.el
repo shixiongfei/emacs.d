@@ -670,44 +670,6 @@
    (add-hook 'lfe-mode-hook #'paredit-mode)
    (add-hook 'lfe-mode-hook #'rainbow-delimiters-mode))
 
-;; Elixir
-(use-package elixir-mode
-  :ensure t
-  :config
-  (add-hook 'elixir-mode-hook #'subword-mode)
-  (add-hook 'elixir-mode-hook
-            (lambda ()
-              (add-hook 'before-save-hook 'elixir-format nil t))))
-
-(use-package inf-elixir
-  :ensure t
-  :after elixir-mode
-  :config
-  (add-hook 'elixir-mode-hook
-            (lambda ()
-              (define-key elixir-mode-map (kbd "C-c C-z") 'inf-elixir-project)
-              (define-key elixir-mode-map (kbd "C-c C-e") 'inf-elixir-send-line)
-              (define-key elixir-mode-map (kbd "C-c C-r") 'inf-elixir-send-region)
-              (define-key elixir-mode-map (kbd "C-c C-k") 'inf-elixir-send-buffer))))
-
-(use-package mix
-  :ensure t
-  :after elixir-mode
-  :config
-  (add-hook 'elixir-mode-hook 'mix-minor-mode))
-
-(use-package flycheck-credo
-  :ensure t
-  :after (flycheck elixir-mode)
-  :config
-  (add-hook 'flycheck-mode-hook #'flycheck-credo-setup))
-
-(use-package exunit
-  :ensure t
-  :after elixir-mode
-  :config
-  (add-hook 'elixir-mode-hook #'exunit-mode))
-
 ;; Lua
 (use-package lua-mode
   :ensure t
