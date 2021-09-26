@@ -612,12 +612,12 @@
                 (make-directory (rebar-inferior-erlang-compile-outdir nil) t)))))
 
 ;; LFE
- (use-package lfe-mode
-   :ensure t
-   :after (erlang paredit rainbow-delimiters)
-   :config
-   (add-hook 'lfe-mode-hook #'paredit-mode)
-   (add-hook 'lfe-mode-hook #'rainbow-delimiters-mode))
+(use-package lfe-mode
+  :ensure t
+  :after (erlang paredit rainbow-delimiters)
+  :config
+  (add-hook 'lfe-mode-hook #'paredit-mode)
+  (add-hook 'lfe-mode-hook #'rainbow-delimiters-mode))
 
 ;; Lua
 (use-package lua-mode
