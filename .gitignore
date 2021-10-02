@@ -11,3 +11,4 @@ transient/
 var/
 projectile.cache
 .lsp-*
+*.data
