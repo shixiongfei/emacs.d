@@ -566,14 +566,11 @@
   (setq geiser-repl-history-filename
         (expand-file-name "geiser-history" user-savefile-dir)))
 
-(use-package geiser-chez
+(use-package geiser-gambit
   :ensure t
   :after geiser
   :config
-  (when (eq system-type 'darwin)
-    (setq geiser-chez-binary "chez"))
-
-  (setq geiser-active-implementations '(chez)))
+  (setq geiser-active-implementations '(gambit)))
 
 (use-package macrostep-geiser
   :ensure t
