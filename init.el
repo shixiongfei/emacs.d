@@ -359,6 +359,7 @@
   (add-hook 'lisp-interaction-mode-hook #'paredit-mode)
   (add-hook 'ielm-mode-hook #'paredit-mode)
   (add-hook 'lisp-mode-hook #'paredit-mode)
+  (add-hook 'scheme-mode-hook #'paredit-mode)
   (add-hook 'eval-expression-minibuffer-setup-hook #'paredit-mode)
   (diminish 'paredit-mode "()"))
 
@@ -390,7 +391,8 @@
   :ensure t
   :config
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode))
+  (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'scheme-mode-hook #'rainbow-delimiters-mode))
 
 (use-package rainbow-mode
   :ensure t
@@ -552,6 +554,33 @@
 (add-hook 'prog-mode-hook
           (lambda ()
             (set (make-local-variable 'comment-auto-fill-only-comments) t)))
+
+;; Scheme
+(use-package geiser
+  :ensure t
+  :config
+  ;; geiser replies on a REPL to provide autodoc and completion
+  (setq geiser-mode-start-repl-p t)
+
+  ;; keep the home clean
+  (setq geiser-repl-history-filename
+        (expand-file-name "geiser-history" user-savefile-dir)))
+
+(use-package geiser-chez
+  :ensure t
+  :after geiser
+  :config
+  (when (eq system-type 'darwin)
+    (setq geiser-chez-binary "chez"))
+
+  (setq geiser-active-implementations '(chez)))
+
+(use-package macrostep-geiser
+  :ensure t
+  :after (geiser-mode geiser-repl)
+  :config
+  (add-hook 'geiser-mode-hook #'macrostep-geiser-setup)
+  (add-hook 'geiser-repl-mode-hook #'macrostep-geiser-setup))
 
 ;; C/C++
 (use-package cc-mode
