@@ -222,8 +222,8 @@
   (setq-default abbrev-mode t))
 
 (use-package eshell
-  :init
-  (setq eshell-directory-name (expand-file-name "eshell" user-savefile-dir)))
+  :custom
+  (eshell-directory-name (expand-file-name "eshell" user-savefile-dir)))
 
 (use-package uniquify
   :config
@@ -558,13 +558,13 @@
 ;; Scheme
 (use-package geiser
   :ensure t
-  :config
+  :custom
   ;; geiser replies on a REPL to provide autodoc and completion
-  (setq geiser-mode-start-repl-p t)
+  (geiser-mode-start-repl-p t)
 
   ;; keep the home clean
-  (setq geiser-repl-history-filename
-        (expand-file-name "geiser-history" user-savefile-dir)))
+  (geiser-repl-history-filename
+   (expand-file-name "geiser-history" user-savefile-dir)))
 
 (use-package geiser-gambit
   :ensure t
