@@ -555,30 +555,6 @@
           (lambda ()
             (set (make-local-variable 'comment-auto-fill-only-comments) t)))
 
-;; Scheme
-(use-package geiser
-  :ensure t
-  :custom
-  ;; geiser replies on a REPL to provide autodoc and completion
-  (geiser-mode-start-repl-p t)
-
-  ;; keep the home clean
-  (geiser-repl-history-filename
-   (expand-file-name "geiser-history" user-savefile-dir)))
-
-(use-package geiser-gambit
-  :ensure t
-  :after geiser
-  :config
-  (setq geiser-active-implementations '(gambit)))
-
-(use-package macrostep-geiser
-  :ensure t
-  :after (geiser-mode geiser-repl)
-  :config
-  (add-hook 'geiser-mode-hook #'macrostep-geiser-setup)
-  (add-hook 'geiser-repl-mode-hook #'macrostep-geiser-setup))
-
 ;; C/C++
 (use-package cc-mode
   :config
