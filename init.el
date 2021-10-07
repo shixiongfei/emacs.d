@@ -628,8 +628,7 @@
   (racket-memory-limit 8192)
   :config
   (with-eval-after-load 'racket-mode
-    (define-key racket-mode-map (kbd "M-RET") #'racket-run)
-    (define-key racket-mode-map (kbd "M-.") #'xref-find-definitions))
+    (define-key racket-mode-map (kbd "M-RET") #'racket-run))
 
   (add-hook 'racket-mode-hook #'racket-xp-mode)
 
