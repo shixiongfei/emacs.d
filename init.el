@@ -621,6 +621,30 @@
   (add-hook 'lfe-mode-hook #'paredit-mode)
   (add-hook 'lfe-mode-hook #'rainbow-delimiters-mode))
 
+;; Racket
+(use-package racket-mode
+  :ensure t
+  :custom
+  (racket-memory-limit 8192)
+  :config
+  (with-eval-after-load 'racket-mode
+    (define-key racket-mode-map (kbd "M-RET") #'racket-run)
+    (define-key racket-mode-map (kbd "M-.") #'xref-find-definitions))
+
+  (add-hook 'racket-mode-hook #'racket-xp-mode)
+
+  (add-hook 'racket-mode-hook #'paredit-mode)
+  (add-hook 'racket-repl-mode-hook #'paredit-mode)
+
+  (add-hook 'racket-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'racket-repl-mode-hook #'rainbow-delimiters-mode)
+
+  (add-hook 'racket-mode-hook #'racket-unicode-input-method-enable)
+  (add-hook 'racket-repl-mode-hook #'racket-unicode-input-method-enable)
+
+  (add-to-list 'auto-mode-alist '("\\.rkt?\\'" . racket-mode))
+  (add-to-list 'auto-mode-alist '("\\.rkt\\'" . racket-mode)))
+
 ;; Lua
 (use-package lua-mode
   :ensure t
