@@ -462,6 +462,26 @@
   (global-company-mode)
   (diminish 'company-mode))
 
+(use-package lsp-mode
+  :ensure t
+  :config
+  ;; Customize prefix for key-bindings
+  (setq lsp-keymap-prefix "C-l")
+  ;; Enable logging for lsp-mode
+  (setq lsp-log-io t)
+  (with-eval-after-load 'lsp-mode
+    (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
+  (diminish 'lsp-mode))
+
+(use-package lsp-ui
+  :ensure t
+  :after lsp-mode
+  :config
+  (setq lsp-ui-sideline-enable t)
+  (setq lsp-ui-doc-enable t)
+  (setq lsp-ui-doc-position 'bottom)
+  (diminish 'lsp-ui))
+
 (use-package hl-todo
   :ensure t
   :config
@@ -612,6 +632,28 @@
             (lambda ()
               (unless (file-exists-p (rebar-inferior-erlang-compile-outdir nil))
                 (make-directory (rebar-inferior-erlang-compile-outdir nil) t)))))
+
+;; Swift
+(use-package swift-mode
+  :ensure t)
+
+(use-package flycheck-swift
+  :ensure t
+  :after swift-mode
+  :config
+  (add-hook 'swift-mode-hook #'flycheck-swift-setup))
+
+(use-package company-sourcekit
+  :ensure t
+  :after (company swift-mode)
+  :config
+  (add-to-list 'company-backends #'company-sourcekit))
+
+(use-package lsp-sourcekit
+  :ensure t
+  :after (lsp-mode swift-mode)
+  :config
+  (add-hook 'swift-mode-hook #'lsp))
 
 ;; Lua
 (use-package lua-mode
