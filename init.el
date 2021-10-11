@@ -462,6 +462,16 @@
   (global-company-mode)
   (diminish 'company-mode))
 
+(use-package yasnippet
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook #'yas-minor-mode)
+  (diminish 'yas-minor-mode))
+
+(use-package yasnippet-snippets
+  :ensure t
+  :after yasnippet)
+
 (use-package lsp-mode
   :ensure t
   :config
@@ -642,12 +652,6 @@
   :after swift-mode
   :config
   (add-hook 'swift-mode-hook #'flycheck-swift-setup))
-
-(use-package company-sourcekit
-  :ensure t
-  :after (company swift-mode)
-  :config
-  (add-to-list 'company-backends #'company-sourcekit))
 
 (use-package lsp-sourcekit
   :ensure t
