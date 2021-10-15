@@ -641,7 +641,10 @@
   (add-hook 'erlang-shell-mode-hook
             (lambda ()
               (unless (file-exists-p (rebar-inferior-erlang-compile-outdir nil))
-                (make-directory (rebar-inferior-erlang-compile-outdir nil) t)))))
+                (make-directory (rebar-inferior-erlang-compile-outdir nil) t))))
+
+  ;; Enable LSP for Erlang files
+  (add-hook 'erlang-mode-hook #'lsp))
 
 ;; Swift
 (use-package swift-mode
