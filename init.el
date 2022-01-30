@@ -647,12 +647,12 @@
   (add-hook 'erlang-mode-hook #'lsp))
 
 ;; LFE
-  (use-package lfe-mode
-    :ensure t
-    :after (erlang paredit rainbow-delimiters)
-    :config
-    (add-hook 'lfe-mode-hook #'paredit-mode)
-    (add-hook 'lfe-mode-hook #'rainbow-delimiters-mode))
+(use-package lfe-mode
+  :ensure t
+  :after (erlang paredit rainbow-delimiters)
+  :config
+  (add-hook 'lfe-mode-hook #'paredit-mode)
+  (add-hook 'lfe-mode-hook #'rainbow-delimiters-mode))
 
 ;; Swift
 (use-package swift-mode
