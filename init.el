@@ -705,22 +705,6 @@
   (add-hook 'lfe-mode-hook #'paredit-mode)
   (add-hook 'lfe-mode-hook #'rainbow-delimiters-mode))
 
-;; Swift
-(use-package swift-mode
-  :ensure t)
-
-(use-package flycheck-swift
-  :ensure t
-  :after swift-mode
-  :config
-  (add-hook 'swift-mode-hook #'flycheck-swift-setup))
-
-(use-package lsp-sourcekit
-  :ensure t
-  :after (lsp-mode swift-mode)
-  :config
-  (add-hook 'swift-mode-hook #'lsp))
-
 ;; Lua
 (use-package lua-mode
   :ensure t
