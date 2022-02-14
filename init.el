@@ -591,6 +591,8 @@
   :config
   ;; the SBCL configuration file is in Common Lisp
   (add-to-list 'auto-mode-alist '("\\.sbclrc\\'" . lisp-mode))
+  ;; the ABCL configuretion file is in Common Lisp
+  (add-to-list 'auto-mode-alist '("\\.abclrc\\'" . lisp-mode))
   ;; Open files with .cl extension in lisp-mode
   (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode))
 
@@ -601,10 +603,10 @@
     ;; programs and if you invoke SLIME with a negative prefix
     ;; argument, M-- M-x slime, you can select a program from that list.
     (setq slime-lisp-implementations
-          '((ccl64 ("ccl64")
-                   :coding-system utf-8-unix)
+          '((ccl64 ("ccl64") :coding-system utf-8-unix)
             (sbcl ("sbcl" "--noinform" "--dynamic-space-size" "8192")
-                  :coding-system utf-8-unix)))
+                  :coding-system utf-8-unix)
+            (abcl ("abcl") :coding-system utf-8-unix)))
 
     ;; select the default value from slime-lisp-implementations
     (if (and (eq system-type 'darwin)
@@ -614,8 +616,13 @@
       ;; default to SBCL on Linux and Windows
       (setq slime-default-lisp 'sbcl))
 
-    ;; Add fancy slime contribs
-    (setq slime-contribs '(slime-fancy slime-cl-indent slime-company))
+    ;; set slime contribs
+    (setq slime-contribs '(slime-fancy
+                           slime-asdf
+                           slime-banner
+                           slime-autodoc
+                           slime-cl-indent
+                           slime-company))
 
     (setq slime-completion-at-point-functions 'slime-fuzzy-complete-symbol
           slime-net-coding-system 'utf-8-unix
