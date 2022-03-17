@@ -12,3 +12,4 @@ var/
 projectile.cache
 .lsp-*
 *.data
+quelpa/
