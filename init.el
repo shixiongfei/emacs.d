@@ -787,16 +787,17 @@
 
 ;; Fonts setting
 (when (fboundp 'set-fontset-font)
-  (when (eq system-type 'windows-nt)
-    ;; https://files.ax86.net/terminus-ttf/
-    (set-face-attribute 'default nil :font "Terminus (TTF) for Windows" :height 120)
-    (set-fontset-font t 'han "SimSun")
-    (set-fontset-font t 'han "SimSun-ExtB" nil 'append))
+  ;; https://files.ax86.net/terminus-ttf/
+  ;; brew install font-terminus
+  (if (eq system-type 'windows-nt)
+      (set-face-attribute 'default nil :font "Terminus (TTF) for Windows" :height 120)
+    (set-face-attribute 'default nil :font "Terminus (TTF)" :height 140))
+
+  ;; https://fonts.google.com/noto/specimen/Noto+Serif+SC
+  ;; brew install font-noto-serif-cjk-sc
+  (set-fontset-font t 'han "Noto Serif CJK SC")
 
   (when (eq system-type 'darwin)
-    ;; brew install font-terminus
-    (set-face-attribute 'default nil :font "Terminus (TTF)" :height 140)
-    (set-fontset-font t 'han "STSong")
     ;; Enable emoji, and stop the UI from freezing when trying to display them.
     (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend)))
 
