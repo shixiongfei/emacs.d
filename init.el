@@ -800,15 +800,12 @@
 
 ;; Fonts setting
 (when (fboundp 'set-fontset-font)
-  ;; https://files.ax86.net/terminus-ttf/
-  ;; brew install font-terminus
-  (if (eq system-type 'windows-nt)
-      (set-face-attribute 'default nil :font "Terminus (TTF) for Windows" :height 120)
-    (set-face-attribute 'default nil :font "Terminus (TTF)" :height 140))
-
-  ;; https://fonts.google.com/noto/specimen/Noto+Serif+SC
-  ;; brew install font-noto-serif-cjk-sc
-  (set-fontset-font t 'han "Noto Serif CJK SC")
+  ;; https://unifoundry.com/unifont/
+  ;; brew install font-gnu-unifont
+  (when (find-font (font-spec :name "Unifont"))
+    (if (eq system-type 'windows-nt)
+        (set-face-attribute 'default nil :font "Unifont 12")
+      (set-face-attribute 'default nil :font "Unifont 14")))
 
   (when (eq system-type 'darwin)
     ;; Enable emoji, and stop the UI from freezing when trying to display them.
