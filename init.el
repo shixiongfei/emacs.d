@@ -580,12 +580,6 @@
   (add-hook 'prog-mode-hook 'highlight-numbers-mode)
   (diminish 'highlight-numbers-mode))
 
-;; quelpa
-(use-package quelpa-use-package
-  :ensure t
-  :init (setq quelpa-update-melpa-p nil)
-  :config (quelpa-use-package-activate-advice))
-
 ;;; programming language
 (add-hook 'prog-mode-hook
           (lambda ()
@@ -693,13 +687,6 @@
 
   (add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode))
   (add-to-list 'interpreter-mode-alist '("lua" . lua-mode)))
-
-;; Wren
-(use-package wren-mode
-  :ensure t
-  :quelpa (wren-mode
-           :fetcher github
-           :repo "velkyel/wren-mode.el"))
 
 ;; Web
 (use-package web-mode
