@@ -688,6 +688,19 @@
   (add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode))
   (add-to-list 'interpreter-mode-alist '("lua" . lua-mode)))
 
+;; Clojure
+(use-package clojure-mode
+  :ensure t
+  :config
+  (add-hook 'clojure-mode-hook #'paredit-mode)
+  (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode))
+
+(use-package cider
+  :ensure t
+  :config
+  (add-hook 'cider-repl-mode-hook #'paredit-mode)
+  (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode))
+
 ;; Web
 (use-package web-mode
   :ensure t
