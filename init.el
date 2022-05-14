@@ -693,13 +693,21 @@
   :ensure t
   :config
   (add-hook 'clojure-mode-hook #'paredit-mode)
-  (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode))
+  (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'clojure-mode-hook
+            (lambda ()
+              (define-key clojure-mode-map (kbd "M-[") 'paredit-wrap-square)
+              (define-key clojure-mode-map (kbd "M-{") 'paredit-wrap-curly))))
 
 (use-package cider
   :ensure t
   :config
   (add-hook 'cider-repl-mode-hook #'paredit-mode)
-  (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode))
+  (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'cider-repl-mode-hook
+            (lambda ()
+              (define-key cider-repl-mode-map (kbd "M-[") 'paredit-wrap-square)
+              (define-key cider-repl-mode-map (kbd "M-{") 'paredit-wrap-curly))))
 
 ;; Web
 (use-package web-mode
