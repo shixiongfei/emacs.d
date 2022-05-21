@@ -696,6 +696,7 @@
   (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'clojure-mode-hook
             (lambda ()
+              (add-to-list 'clojure-align-cond-forms "match")
               (define-key clojure-mode-map (kbd "M-[") 'paredit-wrap-square)
               (define-key clojure-mode-map (kbd "M-{") 'paredit-wrap-curly))))
 
