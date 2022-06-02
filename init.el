@@ -585,6 +585,9 @@
           (lambda ()
             (set (make-local-variable 'comment-auto-fill-only-comments) t)))
 
+;; Perl
+(defalias 'perl-mode 'cperl-mode)
+
 ;; Common Lisp
 (use-package slime
   :ensure t
