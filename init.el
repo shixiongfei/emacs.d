@@ -759,14 +759,18 @@
                        :html-doctype "html5"
                        :html-link-home "/"
                        :html-link-up "/"
-                       ;; :html-home/up-format ""
+                       :html-home/up-format ""
                        :html-head ,(concat
                                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\"/>\n"
                                     "<script src=\"https://hm.baidu.com/hm.js?4dbc75a8d627e17a8714e4c8b2e9afa8\"></script>")
                        :html-head-include-default-style nil
                        :with-creator t
-                       :auto-preamble t
-                       ;; :html-preamble ""
+                       ;; :auto-preamble t
+                       :html-preamble ,(concat "<div id=\"org-div-home-and-up\">"
+                                               " <a accesskey=\"h\" href=\"/\"> HOME </a>"
+                                               " |"
+                                               " <a accesskey=\"H\" href=\"https://github.com/shixiongfei\"> GITHUB </a>"
+                                               "</div>")
                        :auto-sitemap t
                        :sitemap-style list
                        :sitemap-title "{im}shixiongfei"
