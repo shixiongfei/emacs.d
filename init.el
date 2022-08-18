@@ -690,6 +690,28 @@
   (add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode))
   (add-to-list 'interpreter-mode-alist '("lua" . lua-mode)))
 
+;; Clojure
+(use-package clojure-mode
+  :ensure t
+  :config
+  (add-hook 'clojure-mode-hook #'paredit-mode)
+  (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'clojure-mode-hook
+            (lambda ()
+              (add-to-list 'clojure-align-cond-forms "match")
+              (define-key clojure-mode-map (kbd "M-[") 'paredit-wrap-square)
+              (define-key clojure-mode-map (kbd "M-{") 'paredit-wrap-curly))))
+
+(use-package cider
+  :ensure t
+  :config
+  (add-hook 'cider-repl-mode-hook #'paredit-mode)
+  (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'cider-repl-mode-hook
+            (lambda ()
+              (define-key cider-repl-mode-map (kbd "M-[") 'paredit-wrap-square)
+              (define-key cider-repl-mode-map (kbd "M-{") 'paredit-wrap-curly))))
+
 ;; R
 (use-package ess
   :ensure t
