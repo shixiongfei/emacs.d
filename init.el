@@ -712,16 +712,6 @@
               (define-key cider-repl-mode-map (kbd "M-[") 'paredit-wrap-square)
               (define-key cider-repl-mode-map (kbd "M-{") 'paredit-wrap-curly))))
 
-;; R
-(use-package ess
-  :ensure t
-  :config
-  (add-hook 'ess-mode-hook
-            (lambda ()
-              (ess-set-style 'RStudio)))
-  :custom
-  (ess-ask-for-ess-directory . nil))
-
 ;; Web
 (use-package web-mode
   :ensure t
