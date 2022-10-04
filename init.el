@@ -591,8 +591,6 @@
   :config
   ;; the SBCL configuration file is in Common Lisp
   (add-to-list 'auto-mode-alist '("\\.sbclrc\\'" . lisp-mode))
-  ;; the ABCL configuretion file is in Common Lisp
-  (add-to-list 'auto-mode-alist '("\\.abclrc\\'" . lisp-mode))
   ;; Open files with .cl extension in lisp-mode
   (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode))
 
@@ -609,14 +607,12 @@
             (abcl ("abcl") :coding-system utf-8-unix)))
 
     ;; select the default value from slime-lisp-implementations
-    (if (executable-find "abcl")
-        (setq slime-default-lisp 'abcl)
-      (if (and (eq system-type 'darwin)
-               (executable-find "ccl64"))
-          ;; default to Clozure CL on macOS
-          (setq slime-default-lisp 'ccl64)
-        ;; default to SBCL on Linux and Windows
-        (setq slime-default-lisp 'sbcl)))
+    (if (and (eq system-type 'darwin)
+             (executable-find "ccl64"))
+        ;; default to Clozure CL on macOS
+        (setq slime-default-lisp 'ccl64)
+      ;; default to SBCL on Linux and Windows
+      (setq slime-default-lisp 'sbcl))
 
     ;; set slime contribs
     (setq slime-contribs '(slime-fancy
@@ -670,42 +666,6 @@
   (add-hook 'c-mode-hook 'clang-format-on-save)
   (add-hook 'c++-mode-hook 'clang-format-on-save))
 
-;; Erlang
-(use-package erlang
-  :ensure t
-  :config
-  (require 'erlang-start)
-  (require 'erlang-flymake)
-
-  (add-to-list 'auto-mode-alist '("rebar.config" . erlang-mode))
-
-  (setq inferior-erlang-machine "rebar3")
-  (setq inferior-erlang-machine-options '("shell" "--sname=emacs"))
-  (setq inferior-erlang-shell-type nil)
-
-  (defun rebar-inferior-erlang-compile-outdir (orig &rest args)
-    (concat (projectile-project-root) "_build/default/lib/"
-            (projectile-project-name) "/ebin"))
-  (advice-add 'inferior-erlang-compile-outdir
-              :around 'rebar-inferior-erlang-compile-outdir)
-
-  (add-hook 'erlang-mode-hook
-            (lambda ()
-              (erlang-tags-init)
-              (setq erlang-indent-level 2
-                    erlang-indent-guard 2
-                    erlang-argument-indent 2)
-              (setq erlang-electric-commands '(erlang-electric-comma
-                                               erlang-electric-semicolon
-                                               erlang-electric-newline))))
-  (add-hook 'erlang-shell-mode-hook
-            (lambda ()
-              (unless (file-exists-p (rebar-inferior-erlang-compile-outdir nil))
-                (make-directory (rebar-inferior-erlang-compile-outdir nil) t))))
-
-  ;; Enable LSP for Erlang files
-  (add-hook 'erlang-mode-hook #'lsp))
-
 ;; Lua
 (use-package lua-mode
   :ensure t
@@ -725,28 +685,6 @@
 
   (add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode))
   (add-to-list 'interpreter-mode-alist '("lua" . lua-mode)))
-
-;; Clojure
-(use-package clojure-mode
-  :ensure t
-  :config
-  (add-hook 'clojure-mode-hook #'paredit-mode)
-  (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'clojure-mode-hook
-            (lambda ()
-              (add-to-list 'clojure-align-cond-forms "match")
-              (define-key clojure-mode-map (kbd "M-[") 'paredit-wrap-square)
-              (define-key clojure-mode-map (kbd "M-{") 'paredit-wrap-curly))))
-
-(use-package cider
-  :ensure t
-  :config
-  (add-hook 'cider-repl-mode-hook #'paredit-mode)
-  (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'cider-repl-mode-hook
-            (lambda ()
-              (define-key cider-repl-mode-map (kbd "M-[") 'paredit-wrap-square)
-              (define-key cider-repl-mode-map (kbd "M-{") 'paredit-wrap-curly))))
 
 ;; Web
 (use-package web-mode
