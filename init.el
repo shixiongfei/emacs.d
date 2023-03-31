@@ -1,6 +1,6 @@
 ;;; init.el --- ShiXiongfei's Emacs configuration
 ;;
-;; Copyright (c) 2021 Xiongfei Shi
+;; Copyright (c) 2021-2023 Xiongfei Shi
 ;;
 ;; Author: Xiongfei Shi <xiongfei.shi(a)icloud.com>
 ;; License: Apache-2.0
@@ -726,66 +726,7 @@
      '((C . t)
        (calc .t)
        (emacs-lisp . t)))
-    (setq org-confirm-babel-evaluate nil))
-
-  (defun org-publish-sitemap-time-entry (entry style project)
-    (format "%s %s"
-            (format-time-string
-             "[%Y.%m.%d]"
-             (org-publish-find-date entry project))
-            (org-publish-sitemap-default-entry entry style project)))
-
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (setq org-html-validation-link nil)
-              (setq org-export-with-creator t)
-              (setq org-publish-project-alist
-                    `(("org-post"
-                       :base-directory "~/Codes/org/post"
-                       :base-extension "org"
-                       :publishing-directory "~/Codes/website/public"
-                       :recursive t
-                       :exclude "private*\\|.*\.private\.org"
-                       :publishing-function org-html-publish-to-html
-                       :section-numbers nil
-                       :with-sub-superscript nil
-                       :author "shixiongfei"
-                       :html-validation-link nil
-                       :html-doctype "html5"
-                       :html-link-home "/"
-                       :html-link-up "/"
-                       :html-home/up-format ""
-                       :html-head ,(concat
-                                    "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\"/>\n"
-                                    "<script src=\"https://hm.baidu.com/hm.js?4dbc75a8d627e17a8714e4c8b2e9afa8\"></script>")
-                       :html-head-include-default-style nil
-                       :with-creator t
-                       ;; :auto-preamble t
-                       :html-preamble ,(concat "<div id=\"org-div-home-and-up\">"
-                                               " <a accesskey=\"h\" href=\"/\"> HOME </a>"
-                                               " |"
-                                               " <a accesskey=\"H\" href=\"https://github.com/shixiongfei\"> GITHUB </a>"
-                                               "</div>")
-                       :auto-sitemap t
-                       :sitemap-style list
-                       :sitemap-title "{im}shixiongfei"
-                       :sitemap-filename "index.org"
-                       :sitemap-sort-files anti-chronologically
-                       :sitemap-format-entry org-publish-sitemap-time-entry)
-                      ("org-static"
-                       :base-directory "~/Codes/org/static"
-                       :base-extension "css\\|js"
-                       :publishing-directory "~/Codes/website/public"
-                       :recursive t
-                       :publishing-function org-publish-attachment)
-                      ("org-images"
-                       :base-directory "~/Codes/org/post"
-                       :base-extension "jpg\\|jpeg\\|png\\|gif"
-                       :publishing-directory "~/Codes/website/public"
-                       :recursive t
-                       :publishing-function org-publish-attachment)
-                      ("org" :components ("org-post" "org-static" "org-images"))))
-              (global-set-key (kbd "C-c x") 'org-publish-current-project))))
+    (setq org-confirm-babel-evaluate nil)))
 
 (use-package org-bullets
   :ensure t
