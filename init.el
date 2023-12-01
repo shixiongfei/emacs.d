@@ -593,6 +593,8 @@
   (add-to-list 'auto-mode-alist '("\\.sbclrc\\'" . lisp-mode))
   ;; the ABCL configuretion file is in Common Lisp
   (add-to-list 'auto-mode-alist '("\\.abclrc\\'" . lisp-mode))
+  ;; the ECL configuretion file is in Common Lisp
+  (add-to-list 'auto-mode-alist '("\\.eclrc\\'" . lisp-mode))
   ;; Open files with .cl extension in lisp-mode
   (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode))
 
@@ -604,19 +606,18 @@
     ;; argument, M-- M-x slime, you can select a program from that list.
     (setq slime-lisp-implementations
           '((ccl64 ("ccl64") :coding-system utf-8-unix)
-            (sbcl ("sbcl" "--noinform" "--dynamic-space-size" "8192")
-                  :coding-system utf-8-unix)
-            (abcl ("abcl") :coding-system utf-8-unix)))
+            (sbcl  ("sbcl" "--noinform" "--dynamic-space-size" "8192")
+                   :coding-system utf-8-unix)
+            (abcl  ("abcl") :coding-system utf-8-unix)
+            (ecl   ("ecl")  :coding-system utf-8-unix)))
 
     ;; select the default value from slime-lisp-implementations
-    (if (executable-find "abcl")
-        (setq slime-default-lisp 'abcl)
-      (if (and (eq system-type 'darwin)
-               (executable-find "ccl64"))
-          ;; default to Clozure CL on macOS
-          (setq slime-default-lisp 'ccl64)
-        ;; default to SBCL on Linux and Windows
-        (setq slime-default-lisp 'sbcl)))
+    (if (and (eq system-type 'darwin)
+             (executable-find "ccl64"))
+        ;; default to Clozure CL on macOS
+        (setq slime-default-lisp 'ccl64)
+      ;; default to SBCL on Linux and Windows
+      (setq slime-default-lisp 'sbcl))
 
     ;; set slime contribs
     (setq slime-contribs '(slime-fancy
