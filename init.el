@@ -603,7 +603,7 @@
     ;; used with SLIME. Note that their presence render
     ;; inferior-lisp-program useless. This variable holds a list of
     ;; programs and if you invoke SLIME with a negative prefix
-    ;; argument, M-- M-x slime, you can select a program from that list.
+    ;; argument, C-- M-x slime, you can select a program from that list.
     (setq slime-lisp-implementations
           '((ccl64 ("ccl64") :coding-system utf-8-unix)
             (sbcl  ("sbcl" "--noinform" "--dynamic-space-size" "8192")
