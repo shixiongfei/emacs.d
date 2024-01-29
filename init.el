@@ -1,6 +1,6 @@
 ;;; init.el --- ShiXiongfei's Emacs configuration
 ;;
-;; Copyright (c) 2021-2023 Xiongfei Shi
+;; Copyright (c) 2021-2024 Xiongfei Shi
 ;;
 ;; Author: Xiongfei Shi <xiongfei.shi(a)icloud.com>
 ;; License: Apache-2.0
