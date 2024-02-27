@@ -646,27 +646,29 @@
 
   (add-to-list 'company-backends #'company-slime))
 
-;; Clojure
-(use-package clojure-mode
+;; Scheme
+(use-package geiser
   :ensure t
   :config
-  (add-hook 'clojure-mode-hook #'paredit-mode)
-  (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'clojure-mode-hook
-            (lambda ()
-              (add-to-list 'clojure-align-cond-forms "match")
-              (define-key clojure-mode-map (kbd "M-[") 'paredit-wrap-square)
-              (define-key clojure-mode-map (kbd "M-{") 'paredit-wrap-curly))))
+  ;; geiser replies on a REPL to provide autodoc and completion
+  (setq geiser-mode-start-repl-p t)
 
-(use-package cider
+  ;; keep the home clean
+  (setq geiser-repl-history-filename
+        (expand-file-name "geiser-history" user-savefile-dir)))
+
+(use-package macrostep-geiser
   :ensure t
+  :after (geiser-mode geiser-repl)
   :config
-  (add-hook 'cider-repl-mode-hook #'paredit-mode)
-  (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'cider-repl-mode-hook
-            (lambda ()
-              (define-key cider-repl-mode-map (kbd "M-[") 'paredit-wrap-square)
-              (define-key cider-repl-mode-map (kbd "M-{") 'paredit-wrap-curly))))
+  (add-hook 'geiser-mode-hook #'macrostep-geiser-setup)
+  (add-hook 'geiser-repl-mode-hook #'macrostep-geiser-setup))
+
+(use-package geiser-chibi
+  :ensure t
+  :after geiser
+  :config
+  (setq geiser-active-implementations '(chibi)))
 
 ;; Racket
 (use-package racket-mode
@@ -691,6 +693,28 @@
 
   (add-to-list 'auto-mode-alist '("\\.rkt?\\'" . racket-mode))
   (add-to-list 'auto-mode-alist '("\\.rkt\\'" . racket-mode)))
+
+;; Clojure
+(use-package clojure-mode
+  :ensure t
+  :config
+  (add-hook 'clojure-mode-hook #'paredit-mode)
+  (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'clojure-mode-hook
+            (lambda ()
+              (add-to-list 'clojure-align-cond-forms "match")
+              (define-key clojure-mode-map (kbd "M-[") 'paredit-wrap-square)
+              (define-key clojure-mode-map (kbd "M-{") 'paredit-wrap-curly))))
+
+(use-package cider
+  :ensure t
+  :config
+  (add-hook 'cider-repl-mode-hook #'paredit-mode)
+  (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'cider-repl-mode-hook
+            (lambda ()
+              (define-key cider-repl-mode-map (kbd "M-[") 'paredit-wrap-square)
+              (define-key cider-repl-mode-map (kbd "M-{") 'paredit-wrap-curly))))
 
 ;; C/C++
 (use-package cc-mode
