@@ -664,11 +664,14 @@
   (add-hook 'geiser-mode-hook #'macrostep-geiser-setup)
   (add-hook 'geiser-repl-mode-hook #'macrostep-geiser-setup))
 
-(use-package geiser-chibi
+(use-package geiser-chez
   :ensure t
   :after geiser
   :config
-  (setq geiser-active-implementations '(chibi)))
+  (when (eq system-type 'darwin)
+    (setq geiser-chez-binary "chez"))
+
+  (setq geiser-active-implementations '(chez)))
 
 ;; Racket
 (use-package racket-mode
