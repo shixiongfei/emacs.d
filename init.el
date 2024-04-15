@@ -658,9 +658,7 @@
         (expand-file-name "geiser-history" user-savefile-dir))
 
   ;; select the default scheme implementation
-  (if (executable-find "gsi")
-      (setq geiser-default-implementation 'gambit)
-    (setq geiser-default-implementation 'chez)))
+  (setq geiser-default-implementation 'chez))
 
 (use-package macrostep-geiser
   :ensure t
@@ -677,12 +675,6 @@
     (setq geiser-chez-binary "chez"))
 
   (setq geiser-active-implementations '(chez)))
-
-(use-package geiser-gambit
-  :ensure t
-  :after geiser
-  :config
-  (setq geiser-active-implementations '(gambit)))
 
 ;; Racket
 (use-package racket-mode
