@@ -657,8 +657,13 @@
   (setq geiser-repl-history-filename
         (expand-file-name "geiser-history" user-savefile-dir))
 
-  ;; select the default scheme implementation
-  (setq geiser-default-implementation 'chez))
+  ;; a list of alternative Scheme implementations
+  (setq geiser-active-implementations '(chez chibi))
+
+  ;; select the default Scheme implementation
+  (if (executable-find "chibi-scheme")
+      (setq geiser-default-implementation 'chibi)
+    (setq geiser-default-implementation 'chez)))
 
 (use-package macrostep-geiser
   :ensure t
@@ -672,9 +677,11 @@
   :after geiser
   :config
   (when (eq system-type 'darwin)
-    (setq geiser-chez-binary "chez"))
+    (setq geiser-chez-binary "chez")))
 
-  (setq geiser-active-implementations '(chez)))
+(use-package geiser-chibi
+  :ensure t
+  :after geiser)
 
 ;; Racket
 (use-package racket-mode
