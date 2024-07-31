@@ -646,7 +646,10 @@
                     (error "No current process buffer.  See variable `scheme-buffer'"))
                   (when eob-p
                     (push-mark)
-                    (goto-char (point-max))))))))
+                    (goto-char (point-max))))))
+
+    (add-to-list 'auto-mode-alist '("\\.sch\\'" . scheme-mode))
+    (add-to-list 'auto-mode-alist '("\\.scm\\'" . scheme-mode))))
 
 ;; C/C++
 (use-package cc-mode
