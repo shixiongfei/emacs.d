@@ -585,6 +585,67 @@
           (lambda ()
             (set (make-local-variable 'comment-auto-fill-only-comments) t)))
 
+;; Common Lisp
+(use-package slime
+  :ensure t
+  :config
+  ;; the SBCL configuration file is in Common Lisp
+  (add-to-list 'auto-mode-alist '("\\.sbclrc\\'" . lisp-mode))
+  ;; the ABCL configuretion file is in Common Lisp
+  (add-to-list 'auto-mode-alist '("\\.abclrc\\'" . lisp-mode))
+  ;; the ECL configuretion file is in Common Lisp
+  (add-to-list 'auto-mode-alist '("\\.eclrc\\'" . lisp-mode))
+  ;; Open files with .cl extension in lisp-mode
+  (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode))
+
+  (with-eval-after-load "slime"
+    ;; a list of alternative Common Lisp implementations that can be
+    ;; used with SLIME. Note that their presence render
+    ;; inferior-lisp-program useless. This variable holds a list of
+    ;; programs and if you invoke SLIME with a negative prefix
+    ;; argument, C-- M-x slime, you can select a program from that list.
+    (setq slime-lisp-implementations
+          '((ccl64 ("ccl64") :coding-system utf-8-unix)
+            (sbcl  ("sbcl" "--noinform" "--dynamic-space-size" "8192")
+                   :coding-system utf-8-unix)
+            (abcl  ("abcl") :coding-system utf-8-unix)
+            (ecl   ("ecl")  :coding-system utf-8-unix)))
+
+    ;; select the default value from slime-lisp-implementations
+    (if (and (eq system-type 'darwin)
+             (executable-find "ccl64"))
+        ;; default to Clozure CL on macOS
+        (setq slime-default-lisp 'ccl64)
+      ;; default to SBCL on Linux and Windows
+      (setq slime-default-lisp 'sbcl))
+
+    ;; set slime contribs
+    (setq slime-contribs '(slime-fancy
+                           slime-asdf
+                           slime-banner
+                           slime-autodoc
+                           slime-cl-indent
+                           slime-company))
+
+    (setq slime-completion-at-point-functions 'slime-fuzzy-complete-symbol
+          slime-net-coding-system 'utf-8-unix
+          slime-enable-evaluate-in-emacs t)
+
+    (add-hook 'slime-repl-mode-hook (lambda ()
+                                      (whitespace-mode -1)))
+
+    (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector)))
+
+(use-package slime-company
+  :ensure t
+  :after
+  (slime company)
+  :config
+  (setq slime-company-completion 'fuzzy
+        slime-company-after-completion 'slime-company-just-one-space)
+
+  (add-to-list 'company-backends #'company-slime))
+
 ;; Bigloo Scheme
 (if (locate-library "bmacs")
     (require 'bmacs)
