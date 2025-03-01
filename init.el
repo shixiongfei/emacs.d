@@ -1,6 +1,6 @@
 ;;; init.el --- ShiXiongfei's Emacs configuration
 ;;
-;; Copyright (c) 2021-2024 Xiongfei Shi
+;; Copyright (c) 2021-2025 Xiongfei Shi
 ;;
 ;; Author: Xiongfei Shi <xiongfei.shi(a)icloud.com>
 ;; License: Apache-2.0
@@ -646,71 +646,51 @@
 
   (add-to-list 'company-backends #'company-slime))
 
-;; Bigloo Scheme
-(if (locate-library "bmacs")
-    (require 'bmacs)
-  (use-package cmuscheme
-    :init
-    (setq scheme-mit-dialect nil)
-    (setq scheme-program-name "bigloo")
-    :config
-    ;; bypass the interactive question and start the default interpreter
-    (defun scheme-proc ()
-      "Return the current Scheme process, starting one if necessary."
-      (unless (and scheme-buffer
-                   (get-buffer scheme-buffer)
-                   (comint-check-proc scheme-buffer))
-        (save-window-excursion
-          (run-scheme scheme-program-name)))
-      (or (scheme-get-process)
-          (error "No current process.  See variable `scheme-buffer'")))
+;; Racket
+(use-package racket-mode
+  :ensure t
+  :custom
+  (racket-memory-limit 8192)
+  :config
+  (with-eval-after-load 'racket-mode
+    (define-key racket-mode-map (kbd "M-RET") #'racket-run)
+    (define-key racket-mode-map (kbd "M-.") #'xref-find-definitions))
 
-    (defun scheme-split-window ()
-      (cond
-       ((= 1 (count-windows))
-        (delete-other-windows)
-        (split-window-vertically (floor (* 0.68 (window-height))))
-        (other-window 1)
-        (switch-to-buffer "*scheme*")
-        (other-window 1))
-       ((not (get-buffer-window "*scheme*"))
-        (other-window 1)
-        (switch-to-buffer "*scheme*")
-        (other-window -1))))
+  (add-hook 'racket-mode-hook #'racket-xp-mode)
 
-    (defun scheme-send-last-sexp-split-window ()
-      (interactive)
-      (scheme-split-window)
-      (scheme-send-last-sexp))
+  (add-hook 'racket-mode-hook #'paredit-mode)
+  (add-hook 'racket-repl-mode-hook #'paredit-mode)
 
-    (defun scheme-send-definition-split-window ()
-      (interactive)
-      (scheme-split-window)
-      (scheme-send-definition))
+  (add-hook 'racket-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'racket-repl-mode-hook #'rainbow-delimiters-mode)
 
-    (add-hook 'scheme-mode-hook
-              (lambda ()
-                (define-key scheme-mode-map (kbd "C-x C-e") 'scheme-send-last-sexp-split-window)
-                (define-key scheme-mode-map (kbd "C-c C-e") 'scheme-send-definition-split-window)))
+  (add-hook 'racket-mode-hook #'racket-unicode-input-method-enable)
+  (add-hook 'racket-repl-mode-hook #'racket-unicode-input-method-enable)
 
-    (add-hook 'inferior-scheme-mode-hook
-              (lambda ()
-                ;; Overwrite the standard 'switch-to-buffer' to use
-                ;; 'switch-to-buffer-other-window'
-                (defun switch-to-scheme (eob-p)
-                  "Switch to the Scheme process buffer.
-                   With argument, position cursor at end of buffer."
-                  (interactive "P")
-                  (if (or (and scheme-buffer (get-buffer scheme-buffer))
-                          (scheme-interactively-start-process))
-                      (switch-to-buffer-other-window scheme-buffer)
-                    (error "No current process buffer.  See variable `scheme-buffer'"))
-                  (when eob-p
-                    (push-mark)
-                    (goto-char (point-max))))))
+  (add-to-list 'auto-mode-alist '("\\.rkt?\\'" . racket-mode))
+  (add-to-list 'auto-mode-alist '("\\.rkt\\'" . racket-mode)))
 
-    (add-to-list 'auto-mode-alist '("\\.sch\\'" . scheme-mode))
-    (add-to-list 'auto-mode-alist '("\\.scm\\'" . scheme-mode))))
+;; Clojure
+(use-package clojure-mode
+  :ensure t
+  :config
+  (add-hook 'clojure-mode-hook #'paredit-mode)
+  (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'clojure-mode-hook
+            (lambda ()
+              (add-to-list 'clojure-align-cond-forms "match")
+              (define-key clojure-mode-map (kbd "M-[") 'paredit-wrap-square)
+              (define-key clojure-mode-map (kbd "M-{") 'paredit-wrap-curly))))
+
+(use-package cider
+  :ensure t
+  :config
+  (add-hook 'cider-repl-mode-hook #'paredit-mode)
+  (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'cider-repl-mode-hook
+            (lambda ()
+              (define-key cider-repl-mode-map (kbd "M-[") 'paredit-wrap-square)
+              (define-key cider-repl-mode-map (kbd "M-{") 'paredit-wrap-curly))))
 
 ;; C/C++
 (use-package cc-mode
@@ -737,6 +717,119 @@
   (add-hook 'c-mode-hook 'clang-format-on-save)
   (add-hook 'c++-mode-hook 'clang-format-on-save))
 
+;; Web
+(use-package web-mode
+  :ensure t
+  :custom
+  (web-mode-markup-indent-offset 2)
+  (web-mode-css-indent-offset 2)
+  (web-mode-code-indent-offset 2)
+  :config
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.hbs\\'" . web-mode)))
+
+;; Erlang
+(use-package erlang
+  :ensure t
+  :config
+  (require 'erlang-start)
+  (require 'erlang-flymake)
+
+  (add-to-list 'auto-mode-alist '("rebar.config" . erlang-mode))
+
+  (setq inferior-erlang-machine "rebar3")
+  (setq inferior-erlang-machine-options '("shell" "--sname=emacs"))
+  (setq inferior-erlang-shell-type nil)
+
+  (defun rebar-inferior-erlang-compile-outdir (orig &rest args)
+    (concat (projectile-project-root) "_build/default/lib/"
+            (projectile-project-name) "/ebin"))
+  (advice-add 'inferior-erlang-compile-outdir
+              :around 'rebar-inferior-erlang-compile-outdir)
+
+  (add-hook 'erlang-mode-hook
+            (lambda ()
+              (erlang-tags-init)
+              (setq erlang-indent-level 2
+                    erlang-indent-guard 2
+                    erlang-argument-indent 2)
+              (setq erlang-electric-commands '(erlang-electric-comma
+                                               erlang-electric-semicolon
+                                               erlang-electric-newline))))
+  (add-hook 'erlang-shell-mode-hook
+            (lambda ()
+              (unless (file-exists-p (rebar-inferior-erlang-compile-outdir nil))
+                (make-directory (rebar-inferior-erlang-compile-outdir nil) t))))
+
+  ;; Enable LSP for Erlang files
+  (add-hook 'erlang-mode-hook #'lsp))
+
+;; LFE
+(use-package lfe-mode
+  :ensure t
+  :after (erlang paredit rainbow-delimiters)
+  :config
+  (add-hook 'lfe-mode-hook #'paredit-mode)
+  (add-hook 'lfe-mode-hook #'rainbow-delimiters-mode))
+
+;; Elixir
+(use-package elixir-mode
+  :ensure t
+  :config
+  (add-hook 'elixir-mode-hook #'subword-mode)
+  (add-hook 'elixir-mode-hook
+            (lambda ()
+              (add-hook 'before-save-hook 'elixir-format nil t))))
+
+(use-package inf-elixir
+  :ensure t
+  :after elixir-mode
+  :config
+  (add-hook 'elixir-mode-hook
+            (lambda ()
+              (define-key elixir-mode-map (kbd "C-c C-z") 'inf-elixir-project)
+              (define-key elixir-mode-map (kbd "C-c C-e") 'inf-elixir-send-line)
+              (define-key elixir-mode-map (kbd "C-c C-r") 'inf-elixir-send-region)
+              (define-key elixir-mode-map (kbd "C-c C-k") 'inf-elixir-send-buffer))))
+
+(use-package mix
+  :ensure t
+  :after elixir-mode
+  :config
+  (add-hook 'elixir-mode-hook 'mix-minor-mode))
+
+(use-package flycheck-credo
+  :ensure t
+  :after (flycheck elixir-mode)
+  :config
+  (add-hook 'flycheck-mode-hook #'flycheck-credo-setup))
+
+(use-package exunit
+  :ensure t
+  :after elixir-mode
+  :config
+  (add-hook 'elixir-mode-hook #'exunit-mode))
+
+(use-package polymode
+  :mode ("\.ex$" . poly-elixir-web-mode)
+  :config
+  (define-hostmode poly-elixir-hostmode :mode 'elixir-mode)
+  (define-innermode poly-liveview-expr-elixir-innermode
+    :mode 'web-mode
+    :head-matcher (rx line-start (* space) "~H" (= 3 (char "\"'")) line-end)
+    :tail-matcher (rx line-start (* space) (= 3 (char "\"'")) line-end)
+    :head-mode 'host
+    :tail-mode 'host
+    :allow-nested nil
+    :keep-in-mode 'host
+    :fallback-mode 'host)
+  (define-polymode poly-elixir-web-mode
+    :hostmode 'poly-elixir-hostmode
+    :innermodes '(poly-liveview-expr-elixir-innermode)))
+
+(setq web-mode-engines-alist '(("elixir" . "\\.ex\\'")))
+
 ;; Lua
 (use-package lua-mode
   :ensure t
@@ -756,18 +849,6 @@
 
   (add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode))
   (add-to-list 'interpreter-mode-alist '("lua" . lua-mode)))
-
-;; Web
-(use-package web-mode
-  :ensure t
-  :custom
-  (web-mode-markup-indent-offset 2)
-  (web-mode-css-indent-offset 2)
-  (web-mode-code-indent-offset 2)
-  :config
-  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.hbs\\'" . web-mode)))
 
 ;; Markdown
 (use-package markdown-mode
