@@ -612,12 +612,14 @@
             (ecl   ("ecl")  :coding-system utf-8-unix)))
 
     ;; select the default value from slime-lisp-implementations
-    (if (and (eq system-type 'darwin)
-             (executable-find "ccl64"))
-        ;; default to Clozure CL on macOS
-        (setq slime-default-lisp 'ccl64)
-      ;; default to SBCL on Linux and Windows
-      (setq slime-default-lisp 'sbcl))
+    (if (executable-find "abcl")
+        (setq slime-default-lisp 'abcl)
+      (if (and (eq system-type 'darwin)
+              (executable-find "ccl64"))
+          ;; default to Clozure CL on macOS
+          (setq slime-default-lisp 'ccl64)
+        ;; default to SBCL on Linux and Windows
+        (setq slime-default-lisp 'sbcl)))
 
     ;; set slime contribs
     (setq slime-contribs '(slime-fancy
