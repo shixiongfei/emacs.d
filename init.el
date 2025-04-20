@@ -648,6 +648,30 @@
 
   (add-to-list 'company-backends #'company-slime))
 
+;; Scheme
+(use-package geiser
+  :ensure t
+  :config
+  ;; geiser replies on a REPL to provide autodoc and completion
+  (setq geiser-mode-start-repl-p t)
+
+  ;; keep the home clean
+  (setq geiser-repl-history-filename
+        (expand-file-name "geiser-history" user-savefile-dir)))
+
+(use-package macrostep-geiser
+  :ensure t
+  :after (geiser-mode geiser-repl)
+  :config
+  (add-hook 'geiser-mode-hook #'macrostep-geiser-setup)
+  (add-hook 'geiser-repl-mode-hook #'macrostep-geiser-setup))
+
+(use-package geiser-kawa
+  :ensure t
+  :after geiser
+  :config
+  (setq geiser-active-implementations '(kawa)))
+
 ;; Racket
 (use-package racket-mode
   :ensure t
