@@ -657,7 +657,9 @@
 
   ;; keep the home clean
   (setq geiser-repl-history-filename
-        (expand-file-name "geiser-history" user-savefile-dir)))
+        (expand-file-name "geiser-history" user-savefile-dir))
+
+  (setq geiser-active-implementations '(chez kawa)))
 
 (use-package macrostep-geiser
   :ensure t
@@ -666,11 +668,16 @@
   (add-hook 'geiser-mode-hook #'macrostep-geiser-setup)
   (add-hook 'geiser-repl-mode-hook #'macrostep-geiser-setup))
 
-(use-package geiser-kawa
+(use-package geiser-chez
   :ensure t
   :after geiser
   :config
-  (setq geiser-active-implementations '(kawa)))
+  (when (eq system-type 'darwin)
+    (setq geiser-chez-binary "chez")))
+
+(use-package geiser-kawa
+  :ensure t
+  :after geiser)
 
 ;; Racket
 (use-package racket-mode
