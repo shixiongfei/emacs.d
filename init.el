@@ -615,7 +615,7 @@
     (if (executable-find "abcl")
         (setq slime-default-lisp 'abcl)
       (if (and (eq system-type 'darwin)
-              (executable-find "ccl64"))
+               (executable-find "ccl64"))
           ;; default to Clozure CL on macOS
           (setq slime-default-lisp 'ccl64)
         ;; default to SBCL on Linux and Windows
