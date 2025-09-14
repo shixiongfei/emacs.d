@@ -673,38 +673,6 @@
   (add-hook 'c-mode-hook 'clang-format-on-save)
   (add-hook 'c++-mode-hook 'clang-format-on-save))
 
-;; Web
-(use-package web-mode
-  :ensure t
-  :custom
-  (web-mode-markup-indent-offset 2)
-  (web-mode-css-indent-offset 2)
-  (web-mode-code-indent-offset 2)
-  :config
-  (add-to-list 'auto-mode-alist '("\\.htm?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.xhtml?\\'" . web-mode)))
-
-;; Lua
-(use-package lua-mode
-  :ensure t
-  :config
-  (setq lua-indent-level 2)
-  (setq lua-indent-nested-block-content-align nil)
-  (setq lua-indent-close-paren-align nil)
-  (setq lua-indent-string-contents t)
-
-  (add-hook 'lua-mode-hook
-            (lambda ()
-              (define-key lua-mode-map (kbd "C-c C-b") 'lua-send-buffer)
-              (define-key lua-mode-map (kbd "C-c C-l") 'lua-send-current-line)
-              (define-key lua-mode-map (kbd "C-c C-f") 'lua-send-defun)
-              (define-key lua-mode-map (kbd "C-c C-r") 'lua-send-region)
-              (define-key lua-mode-map (kbd "C-c C-z") 'lua-show-process-buffer)))
-
-  (add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode))
-  (add-to-list 'interpreter-mode-alist '("lua" . lua-mode)))
-
 ;; Markdown
 (use-package markdown-mode
   :ensure t
@@ -713,36 +681,6 @@
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
-
-;; Org-Mode
-(use-package org
-  :init
-  (unless (version< (org-version) "9.2")
-    (require 'org-tempo))
-  (setq org-log-done t)
-  :config
-  (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (define-key org-mode-map (kbd "C-a") 'org-beginning-of-line)
-              (make-local-variable 'minor-mode-overriding-map-alist)))
-
-  (with-eval-after-load 'org
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((C . t)
-       (calc .t)
-       (emacs-lisp . t)))
-    (setq org-confirm-babel-evaluate nil)))
-
-(use-package org-bullets
-  :ensure t
-  :config
-  (add-hook 'org-mode-hook #'org-bullets-mode))
-
-;; YAML
-(use-package yaml-mode
-  :ensure t)
 
 ;; Fonts setting
 (when (fboundp 'set-fontset-font)
