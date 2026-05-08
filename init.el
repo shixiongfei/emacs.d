@@ -682,6 +682,50 @@
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
+;; Erlang
+(use-package erlang
+  :ensure t
+  :config
+  (require 'erlang-start)
+  (require 'erlang-flymake)
+
+  (add-to-list 'auto-mode-alist '("rebar.config" . erlang-mode))
+
+  (setq inferior-erlang-machine "rebar3")
+  (setq inferior-erlang-machine-options '("shell" "--sname=emacs"))
+  (setq inferior-erlang-shell-type nil)
+
+  (defun rebar-inferior-erlang-compile-outdir (orig &rest args)
+    (concat (projectile-project-root) "_build/default/lib/"
+            (projectile-project-name) "/ebin"))
+  (advice-add 'inferior-erlang-compile-outdir
+              :around 'rebar-inferior-erlang-compile-outdir)
+
+  (add-hook 'erlang-mode-hook
+            (lambda ()
+              (erlang-tags-init)
+              (setq erlang-indent-level 2
+                    erlang-indent-guard 2
+                    erlang-argument-indent 2)
+              (setq erlang-electric-commands '(erlang-electric-comma
+                                               erlang-electric-semicolon
+                                               erlang-electric-newline))))
+  (add-hook 'erlang-shell-mode-hook
+            (lambda ()
+              (unless (file-exists-p (rebar-inferior-erlang-compile-outdir nil))
+                (make-directory (rebar-inferior-erlang-compile-outdir nil) t))))
+
+  ;; Enable LSP for Erlang files
+  (add-hook 'erlang-mode-hook #'lsp))
+
+;; LFE
+(use-package lfe-mode
+  :ensure t
+  :after (erlang paredit rainbow-delimiters)
+  :config
+  (add-hook 'lfe-mode-hook #'paredit-mode)
+  (add-hook 'lfe-mode-hook #'rainbow-delimiters-mode))
+
 ;; Fonts setting
 (when (fboundp 'set-fontset-font)
   ;; https://unifoundry.com/unifont/
