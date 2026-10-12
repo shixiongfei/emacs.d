@@ -585,68 +585,33 @@
           (lambda ()
             (set (make-local-variable 'comment-auto-fill-only-comments) t)))
 
-;; Common Lisp
-(use-package slime
+;; Scheme
+(use-package geiser
   :ensure t
   :config
-  ;; the SBCL configuration file is in Common Lisp
-  (add-to-list 'auto-mode-alist '("\\.sbclrc\\'" . lisp-mode))
-  ;; the ABCL configuretion file is in Common Lisp
-  (add-to-list 'auto-mode-alist '("\\.abclrc\\'" . lisp-mode))
-  ;; the ECL configuretion file is in Common Lisp
-  (add-to-list 'auto-mode-alist '("\\.eclrc\\'" . lisp-mode))
-  ;; Open files with .cl extension in lisp-mode
-  (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode))
+  ;; geiser replies on a REPL to provide autodoc and completion
+  (setq geiser-mode-start-repl-p t)
 
-  (with-eval-after-load "slime"
-    ;; a list of alternative Common Lisp implementations that can be
-    ;; used with SLIME. Note that their presence render
-    ;; inferior-lisp-program useless. This variable holds a list of
-    ;; programs and if you invoke SLIME with a negative prefix
-    ;; argument, C-- M-x slime, you can select a program from that list.
-    (setq slime-lisp-implementations
-          '((ccl64 ("ccl64") :coding-system utf-8-unix)
-            (sbcl  ("sbcl" "--noinform" "--dynamic-space-size" "8192")
-                   :coding-system utf-8-unix)
-            (abcl  ("abcl") :coding-system utf-8-unix)
-            (ecl   ("ecl")  :coding-system utf-8-unix)))
+  ;; keep the home clean
+  (setq geiser-repl-history-filename
+        (expand-file-name "geiser-history" user-savefile-dir))
 
-    ;; select the default value from slime-lisp-implementations
-    (if (executable-find "abcl")
-        (setq slime-default-lisp 'abcl)
-      (if (and (eq system-type 'darwin)
-               (executable-find "ccl64"))
-          ;; default to Clozure CL on macOS
-          (setq slime-default-lisp 'ccl64)
-        ;; default to SBCL on Linux and Windows
-        (setq slime-default-lisp 'sbcl)))
+  (setq geiser-active-implementations '(chez)))
 
-    ;; set slime contribs
-    (setq slime-contribs '(slime-fancy
-                           slime-asdf
-                           slime-banner
-                           slime-autodoc
-                           slime-cl-indent
-                           slime-company))
-
-    (setq slime-completion-at-point-functions 'slime-fuzzy-complete-symbol
-          slime-net-coding-system 'utf-8-unix
-          slime-enable-evaluate-in-emacs t)
-
-    (add-hook 'slime-repl-mode-hook (lambda ()
-                                      (whitespace-mode -1)))
-
-    (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector)))
-
-(use-package slime-company
+(use-package macrostep-geiser
   :ensure t
-  :after
-  (slime company)
+  :after (geiser-mode geiser-repl)
   :config
-  (setq slime-company-completion 'fuzzy
-        slime-company-after-completion 'slime-company-just-one-space)
+  (add-hook 'geiser-mode-hook #'macrostep-geiser-setup)
+  (add-hook 'geiser-repl-mode-hook #'macrostep-geiser-setup))
 
-  (add-to-list 'company-backends #'company-slime))
+;; Chez Scheme
+(use-package geiser-chez
+  :ensure t
+  :after geiser
+  :config
+  (when (eq system-type 'darwin)
+    (setq geiser-chez-binary "chez")))
 
 ;; C/C++
 (use-package cc-mode
@@ -681,63 +646,6 @@
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
-
-;; Erlang
-(use-package erlang
-  :ensure t
-  :config
-  (require 'erlang-start)
-  (require 'erlang-flymake)
-
-  (add-to-list 'auto-mode-alist '("rebar.config" . erlang-mode))
-
-  (setq inferior-erlang-machine "rebar3")
-  (setq inferior-erlang-machine-options '("shell" "--sname=emacs"))
-  (setq inferior-erlang-shell-type nil)
-
-  (defun rebar-inferior-erlang-compile-outdir (orig &rest args)
-    (concat (projectile-project-root) "_build/default/lib/"
-            (projectile-project-name) "/ebin"))
-  (advice-add 'inferior-erlang-compile-outdir
-              :around 'rebar-inferior-erlang-compile-outdir)
-
-  (add-hook 'erlang-mode-hook
-            (lambda ()
-              (erlang-tags-init)
-              (setq erlang-indent-level 2
-                    erlang-indent-guard 2
-                    erlang-argument-indent 2)
-              (setq erlang-electric-commands '(erlang-electric-comma
-                                               erlang-electric-semicolon
-                                               erlang-electric-newline))))
-  (add-hook 'erlang-shell-mode-hook
-            (lambda ()
-              (unless (file-exists-p (rebar-inferior-erlang-compile-outdir nil))
-                (make-directory (rebar-inferior-erlang-compile-outdir nil) t))))
-
-  ;; Enable LSP for Erlang files
-  (add-hook 'erlang-mode-hook #'lsp))
-
-;; LFE
-(use-package lfe-mode
-  :ensure t
-  :after (erlang paredit rainbow-delimiters)
-  :config
-  (add-hook 'lfe-mode-hook #'paredit-mode)
-  (add-hook 'lfe-mode-hook #'rainbow-delimiters-mode))
-
-;; Fonts setting
-(when (fboundp 'set-fontset-font)
-  ;; https://unifoundry.com/unifont/
-  ;; brew install font-gnu-unifont
-  (when (find-font (font-spec :name "Unifont"))
-    (if (eq system-type 'windows-nt)
-        (set-face-attribute 'default nil :font "Unifont 12")
-      (set-face-attribute 'default nil :font "Unifont 14")))
-
-  (when (eq system-type 'darwin)
-    ;; Enable emoji, and stop the UI from freezing when trying to display them.
-    (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend)))
 
 ;; config changes made through the customize UI will be stored here
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))

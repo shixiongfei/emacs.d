@@ -4,7 +4,7 @@
 *.~undo-tree
 elpa
 auto-save-list
-projectile-bookmarks.eld
+*.eld
 savefile/
 custom.el
 transient/
